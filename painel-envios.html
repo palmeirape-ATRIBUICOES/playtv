@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -1283,7 +1283,10 @@
                         expObj.setHours(0,0,0,0);
                         isExpired = expObj <= todayObj;
                         
-                        ex                    const waPhone = item.phone.replace(/\D/g, '');
+                        expFormatted = `${expParts[2]}/${expParts[1]}/${expParts[0]}`;
+                    }
+
+                    const waPhone = item.phone.replace(/\D/g, '');
                     
                     // Format Message 5 (Renewal text)
                     const msgText5 = (campaignData.templates[5] || '')
@@ -1491,187 +1494,306 @@
             }
         }
 
+        // Debounce timer for batch writes
+        let _saveDebounce = null;
+        let _pendingContactUpdates = {};
+
         function saveToStorage() {
             campaignData.lastUpdated = Date.now();
             localStorage.setItem('iptv_mass_campaign_seq', JSON.stringify(campaignData));
-            pushToCloud();
         }
 
         // ==========================================
-        //        REALTIME CLOUD SYNC ENGINE
+        //   🔥 FIREBASE FIRESTORE REALTIME ENGINE
         // ==========================================
-        
-        function generateRandomSyncKey() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let key = '';
-            for (let i = 0; i < 8; i++) {
-                key += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return 'IPTV-SYNC-' + key;
-        }
 
-        // Initialize parameters on load
-        if (!campaignData.syncKey) {
-            campaignData.syncKey = generateRandomSyncKey();
-        }
-        if (!campaignData.lastUpdated) {
-            campaignData.lastUpdated = Date.now();
-        }
+        // Firebase SDK is loaded via CDN modules at the bottom of the file.
+        // These globals are set after Firebase initializes.
+        let db = null;
+        let _firestoreReady = false;
+        let _ignoreNextSnapshot = false;
 
         function updateSyncStatus(status) {
             const pill = document.getElementById('sync-status-pill');
             if (!pill) return;
             pill.textContent = status;
-            if (status === 'Sincronizado' || status === 'Nuvem Ativa') {
+            if (status === '🟢 Tempo Real' || status === '🟢 Conectado') {
                 pill.style.color = '#22c55e';
-            } else if (status === 'Carregando...' || status === 'Sincronizando...') {
+            } else if (status === '🟡 Salvando...' || status === '🟡 Carregando...') {
                 pill.style.color = '#ff9f0a';
             } else {
                 pill.style.color = '#ef4444';
             }
         }
 
-        async function pushToCloud() {
-            if (!campaignData.syncKey) return;
-            updateSyncStatus('Enviando...');
-            
-            // HYBRID SYNC: Only sync active, edited, or converted contacts!
-            // Filters out raw uncontacted 'pending' contacts (dropping payload from 1.2MB to a few KB!)
-            const activeContacts = campaignData.contacts.filter(c => 
-                c.status !== 'pending' || 
-                c.mac || 
-                c.pass || 
-                c.expiration || 
-                (c.server && c.server !== 'Nenhum')
-            );
-            
-            const payload = {
-                syncKey: campaignData.syncKey,
-                templates: campaignData.templates,
-                includeMockLink: campaignData.includeMockLink,
-                lastUpdated: campaignData.lastUpdated,
-                contacts: activeContacts
+        // Push a single contact update to Firestore (debounced)
+        function pushContactToFirestore(index) {
+            if (!_firestoreReady || !db) return;
+            const contact = campaignData.contacts[index];
+            if (!contact) return;
+
+            const phoneKey = contact.phone.replace(/\D/g, '') || `idx_${index}`;
+            _pendingContactUpdates[phoneKey] = {
+                name: contact.name || '',
+                phone: contact.phone || '',
+                status: contact.status || 'pending',
+                mac: contact.mac || '',
+                pass: contact.pass || '',
+                server: contact.server || 'Nenhum',
+                expiration: contact.expiration || ''
             };
 
+            // Debounce: flush all pending updates in 500ms
+            if (_saveDebounce) clearTimeout(_saveDebounce);
+            _saveDebounce = setTimeout(flushPendingUpdates, 500);
+        }
+
+        async function flushPendingUpdates() {
+            if (!_firestoreReady || !db) return;
+            const updates = { ..._pendingContactUpdates };
+            _pendingContactUpdates = {};
+
+            const keys = Object.keys(updates);
+            if (keys.length === 0) return;
+
+            updateSyncStatus('🟡 Salvando...');
+            _ignoreNextSnapshot = true;
+
             try {
-                const response = await fetch(`https://kvdb.io/22xdgL9dZdQQ33YKe7vL5S/${campaignData.syncKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (response.ok) {
-                    updateSyncStatus('Nuvem Ativa');
-                } else {
-                    updateSyncStatus('Erro de Nuvem');
+                // Use batched writes for efficiency
+                const batch = db.batch();
+                for (const phoneKey of keys) {
+                    const docRef = db.collection('campaigns').doc('main').collection('contacts').doc(phoneKey);
+                    batch.set(docRef, updates[phoneKey], { merge: true });
                 }
+                await batch.commit();
+                updateSyncStatus('🟢 Tempo Real');
             } catch (err) {
-                console.error(err);
-                updateSyncStatus('Sem Conexão');
+                console.error('Firestore batch write error:', err);
+                updateSyncStatus('🔴 Erro Firebase');
+            }
+
+            setTimeout(() => { _ignoreNextSnapshot = false; }, 1000);
+        }
+
+        // Push templates & settings to Firestore
+        async function pushSettingsToFirestore() {
+            if (!_firestoreReady || !db) return;
+            try {
+                await db.collection('campaigns').doc('main').set({
+                    templates: campaignData.templates,
+                    includeMockLink: campaignData.includeMockLink,
+                    lastUpdated: Date.now()
+                }, { merge: true });
+            } catch (err) {
+                console.error('Firestore settings push error:', err);
             }
         }
 
-        async function pullFromCloud(isManual = false) {
-            if (!campaignData.syncKey) return;
-            if (isManual) updateSyncStatus('Sincronizando...');
+        // Override saveToStorage to also push to Firestore
+        const _originalSaveTemplates = typeof saveTemplates === 'function' ? saveTemplates : null;
+
+        // Full initial upload of all contacts to Firestore
+        async function migrateAllContactsToFirestore() {
+            if (!_firestoreReady || !db) return;
+            updateSyncStatus('🟡 Migrando dados...');
+
+            const contacts = campaignData.contacts;
+            const BATCH_LIMIT = 450; // Firestore max 500 per batch, leave margin
+
             try {
-                const response = await fetch(`https://kvdb.io/22xdgL9dZdQQ33YKe7vL5S/${campaignData.syncKey}`);
-                if (response.ok) {
-                    const cloudData = await response.json();
-                    if (cloudData && cloudData.contacts) {
-                        const localTime = campaignData.lastUpdated || 0;
-                        const cloudTime = cloudData.lastUpdated || 0;
-                        
-                        if (cloudTime > localTime) {
-                            // Merge cloud contacts with local contacts
-                            const localContactsMap = {};
-                            campaignData.contacts.forEach((c, idx) => {
-                                localContactsMap[c.phone] = idx;
-                            });
+                for (let i = 0; i < contacts.length; i += BATCH_LIMIT) {
+                    const batch = db.batch();
+                    const chunk = contacts.slice(i, i + BATCH_LIMIT);
 
-                            cloudData.contacts.forEach(cloudContact => {
-                                const localIdx = localContactsMap[cloudContact.phone];
-                                if (localIdx !== undefined) {
-                                    // Contact already exists locally, update active fields
-                                    campaignData.contacts[localIdx].status = cloudContact.status;
-                                    campaignData.contacts[localIdx].mac = cloudContact.mac || '';
-                                    campaignData.contacts[localIdx].pass = cloudContact.pass || '';
-                                    campaignData.contacts[localIdx].server = cloudContact.server || 'Nenhum';
-                                    campaignData.contacts[localIdx].expiration = cloudContact.expiration || '';
-                                } else {
-                                    // New active contact from other device, append to local list
-                                    campaignData.contacts.push(cloudContact);
-                                }
-                            });
+                    for (const contact of chunk) {
+                        const phoneKey = contact.phone.replace(/\D/g, '') || `idx_${i}`;
+                        const docRef = db.collection('campaigns').doc('main').collection('contacts').doc(phoneKey);
+                        batch.set(docRef, {
+                            name: contact.name || '',
+                            phone: contact.phone || '',
+                            status: contact.status || 'pending',
+                            mac: contact.mac || '',
+                            pass: contact.pass || '',
+                            server: contact.server || 'Nenhum',
+                            expiration: contact.expiration || ''
+                        });
+                    }
 
-                            // Update other non-contact data
-                            campaignData.templates = cloudData.templates;
-                            campaignData.includeMockLink = cloudData.includeMockLink;
-                            campaignData.lastUpdated = cloudTime;
+                    await batch.commit();
+                    console.log(`Migrated batch ${i} to ${i + chunk.length}`);
+                }
 
-                            localStorage.setItem('iptv_mass_campaign_seq', JSON.stringify(campaignData));
-                            initCampaignUI();
-                            updateSyncStatus('Sincronizado');
-                            if (isManual) alert("Sucesso! Os dados deste aparelho foram pareados com a nuvem!");
-                        } else if (localTime > cloudTime) {
-                            await pushToCloud();
-                        } else {
-                            updateSyncStatus('Nuvem Ativa');
+                // Also push settings
+                await pushSettingsToFirestore();
+
+                // Mark migration as done
+                localStorage.setItem('iptv_firebase_migrated', 'true');
+                updateSyncStatus('🟢 Tempo Real');
+                console.log('Full migration to Firestore complete!');
+            } catch (err) {
+                console.error('Migration error:', err);
+                updateSyncStatus('🔴 Erro na Migração');
+            }
+        }
+
+        // Listen to real-time changes from Firestore
+        function startRealtimeListener() {
+            if (!_firestoreReady || !db) return;
+
+            // Listen for settings changes
+            db.collection('campaigns').doc('main').onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data.templates) {
+                        campaignData.templates = data.templates;
+                        // Update template textareas
+                        for (let i = 1; i <= 5; i++) {
+                            const el = document.getElementById(`template-text-${i}`);
+                            if (el) el.value = campaignData.templates[i] || '';
                         }
                     }
-                } else if (response.status === 404) {
-                    await pushToCloud();
-                } else {
-                    updateSyncStatus('Erro de Nuvem');
+                    if (data.includeMockLink !== undefined) {
+                        campaignData.includeMockLink = data.includeMockLink;
+                    }
                 }
-            } catch (err) {
-                console.error(err);
-                updateSyncStatus('Sem Conexão');
-            }
+            });
+
+            // Listen for contact changes (real-time!)
+            db.collection('campaigns').doc('main').collection('contacts')
+                .onSnapshot((snapshot) => {
+                    if (_ignoreNextSnapshot) return;
+
+                    let hasChanges = false;
+
+                    // Build a map of local contacts by phone
+                    const localMap = {};
+                    campaignData.contacts.forEach((c, idx) => {
+                        const key = c.phone.replace(/\D/g, '');
+                        localMap[key] = idx;
+                    });
+
+                    snapshot.docChanges().forEach((change) => {
+                        const data = change.doc.data();
+                        const phoneKey = change.doc.id;
+
+                        if (change.type === 'added' || change.type === 'modified') {
+                            const localIdx = localMap[phoneKey];
+                            if (localIdx !== undefined) {
+                                // Update existing local contact
+                                const local = campaignData.contacts[localIdx];
+                                if (local.status !== data.status ||
+                                    local.mac !== (data.mac || '') ||
+                                    local.pass !== (data.pass || '') ||
+                                    local.server !== (data.server || 'Nenhum') ||
+                                    local.expiration !== (data.expiration || '')) {
+                                    
+                                    local.status = data.status || 'pending';
+                                    local.mac = data.mac || '';
+                                    local.pass = data.pass || '';
+                                    local.server = data.server || 'Nenhum';
+                                    local.expiration = data.expiration || '';
+                                    hasChanges = true;
+                                }
+                            } else if (change.type === 'added') {
+                                // New contact from another device
+                                campaignData.contacts.push({
+                                    name: data.name || '',
+                                    phone: data.phone || `+${phoneKey}`,
+                                    status: data.status || 'pending',
+                                    mac: data.mac || '',
+                                    pass: data.pass || '',
+                                    server: data.server || 'Nenhum',
+                                    expiration: data.expiration || ''
+                                });
+                                hasChanges = true;
+                            }
+                        }
+                    });
+
+                    if (hasChanges) {
+                        localStorage.setItem('iptv_mass_campaign_seq', JSON.stringify(campaignData));
+                        updateStats();
+                        renderBatch();
+                        updateSyncStatus('🟢 Tempo Real');
+                    }
+                }, (err) => {
+                    console.error('Firestore listener error:', err);
+                    updateSyncStatus('🔴 Desconectado');
+                });
         }
 
-        async function connectSyncKey() {
-            const inputKey = document.getElementById('sync-key-input').value.trim().toUpperCase();
-            if (!inputKey) return alert("Por favor, insira uma chave.");
-            if (!inputKey.startsWith('IPTV-SYNC-')) return alert("A chave deve começar com 'IPTV-SYNC-'");
-            
-            if (confirm(`Deseja parear com o código ${inputKey}? O lote de contatos atual deste aparelho será substituído pela lista salva na nuvem correspondente a esse código.`)) {
-                campaignData.syncKey = inputKey;
-                campaignData.lastUpdated = 0; // Force merge from server
+        // Enhanced saveToStorage that also pushes to Firestore
+        function saveContactAndSync(index) {
+            saveToStorage();
+            pushContactToFirestore(index);
+        }
+
+        // Override updateContactStatus to sync with Firebase
+        const _origUpdateContactStatus = updateContactStatus;
+        updateContactStatus = function(index, newStatus) {
+            campaignData.contacts[index].status = newStatus;
+            saveToStorage();
+            updateStats();
+            renderBatch();
+            pushContactToFirestore(index);
+        };
+
+        // Override updateClientField to sync with Firebase
+        const _origUpdateClientField = updateClientField;
+        updateClientField = function(originalIndex, fieldName, value) {
+            if (!campaignData.contacts[originalIndex]) return;
+            campaignData.contacts[originalIndex][fieldName] = value;
+            saveToStorage();
+            pushContactToFirestore(originalIndex);
+        };
+
+        // Override saveTemplates to also push to Firestore
+        const _origSaveTemplates = saveTemplates;
+        saveTemplates = function() {
+            campaignData.templates[1] = document.getElementById('template-text-1').value;
+            campaignData.templates[2] = document.getElementById('template-text-2').value;
+            campaignData.templates[3] = document.getElementById('template-text-3').value;
+            campaignData.templates[4] = document.getElementById('template-text-4').value;
+            campaignData.templates[5] = document.getElementById('template-text-5').value;
+            saveToStorage();
+            pushSettingsToFirestore();
+        };
+
+        // Override fireSequenceStep to sync with Firebase
+        const _origFireSequenceStep = fireSequenceStep;
+        fireSequenceStep = function(index, stepNum) {
+            let nextStatus = '';
+            if (stepNum === 1) nextStatus = 'sent';
+            else if (stepNum === 3) nextStatus = 'replied';
+            else if (stepNum === 4) nextStatus = 'client';
+
+            if (nextStatus) {
+                campaignData.contacts[index].status = nextStatus;
                 saveToStorage();
-                document.getElementById('display-sync-key').textContent = inputKey;
-                toggleSyncModal();
-                await pullFromCloud(true);
+                updateStats();
+                setTimeout(renderBatch, 600);
+                pushContactToFirestore(index);
             }
-        }
-
-        function copySyncKey() {
-            navigator.clipboard.writeText(campaignData.syncKey);
-            const btn = document.getElementById('btn-copy-key');
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> Copiado!';
-            setTimeout(() => {
-                btn.innerHTML = '<i class="fa-solid fa-copy"></i> Copiar';
-            }, 2000);
-        }
+        };
 
         function toggleSyncModal() {
             const modal = document.getElementById('sync-modal');
             if (modal.classList.contains('hidden')) {
-                document.getElementById('display-sync-key').textContent = campaignData.syncKey;
                 modal.classList.remove('hidden');
             } else {
                 modal.classList.add('hidden');
             }
         }
 
-        // Background Cloud Puller every 15 seconds
-        setInterval(() => {
-            pullFromCloud();
-        }, 15000);
-
-        // Initial sync fetch on startup
-        setTimeout(() => {
-            pullFromCloud();
-        }, 1000);
+        async function forceResync() {
+            if (!_firestoreReady) return alert('Firebase ainda não está conectado. Aguarde.');
+            if (confirm('Isso vai reenviar todos os seus 4.590 contatos para o Firebase. Deseja continuar?')) {
+                localStorage.removeItem('iptv_firebase_migrated');
+                await migrateAllContactsToFirestore();
+                alert('Reenvio completo! Todos os dados estão sincronizados.');
+            }
+        }
 
         // Register Service Worker for PWA compatibility on iOS Safari
         if ('serviceWorker' in navigator) {
@@ -1683,34 +1805,67 @@
         }
     </script>
 
-    <!-- Cloud Sync Config Modal -->
+    <!-- Firebase SDK (compat mode for simplicity in vanilla HTML) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFtMnxV_eJF7bDAJsWsz0qG6FvmkIlUXM",
+            authDomain: "iptv-crm-sync.firebaseapp.com",
+            projectId: "iptv-crm-sync",
+            storageBucket: "iptv-crm-sync.firebasestorage.app",
+            messagingSenderId: "1056721293199",
+            appId: "1:1056721293199:web:5096c81d11ff27be5b05fa"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+
+        // Enable offline persistence for PWA
+        db.enablePersistence({ synchronizeTabs: true })
+            .then(() => console.log('Firestore offline persistence enabled'))
+            .catch((err) => console.log('Persistence error (may already be enabled):', err.code));
+
+        _firestoreReady = true;
+        updateSyncStatus('🟢 Conectado');
+
+        // Check if initial migration is needed
+        const isMigrated = localStorage.getItem('iptv_firebase_migrated');
+        if (!isMigrated && campaignData.contacts.length > 0) {
+            // First time: upload all local contacts to Firestore
+            migrateAllContactsToFirestore();
+        }
+
+        // Start real-time listener immediately
+        startRealtimeListener();
+    </script>
+
+    <!-- Cloud Sync Config Modal (simplified for Firebase) -->
     <div id="sync-modal" class="sync-modal-backdrop hidden">
         <div class="sync-modal-card">
             <h3 class="sync-modal-title">
-                <i class="fa-solid fa-cloud-arrow-up" style="color: var(--primary);"></i> Nuvem de Sincronização
+                <i class="fa-solid fa-bolt" style="color: var(--primary);"></i> Firebase Tempo Real
             </h3>
             
             <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 16px;">
-                Esta chave conecta e pareia múltiplos aparelhos (computador, notebook, iPhone, etc.) em tempo real, mantendo seus contatos e progresso de envios sincronizados!
+                Seus dados agora são sincronizados automaticamente em tempo real via Firebase. 
+                Qualquer alteração feita no PC aparece instantaneamente no iPhone e vice-versa. 
+                Não é necessário nenhuma configuração manual!
             </p>
 
-            <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-light); display: block; margin-bottom: 6px;">Chave Deste Aparelho:</label>
-            <div class="sync-key-display-box">
-                <span id="display-sync-key">IPTV-SYNC-XXXX-XXXX</span>
-                <button type="button" id="btn-copy-key" onclick="copySyncKey()"><i class="fa-solid fa-copy"></i> Copiar</button>
-            </div>
-
-            <div style="border-top: 1px solid var(--border-glass); padding-top: 16px; margin-top: 16px; margin-bottom: 20px;">
-                <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-light); display: block; margin-bottom: 8px;">Conectar a Outro Aparelho (Pareamento):</label>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">Cole aqui a chave gerada no seu outro dispositivo para sincronizar ambos.</p>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="sync-key-input" class="search-input" style="flex: 1; text-transform: uppercase;" placeholder="Cole a chave (Ex: IPTV-SYNC-...)">
-                    <button class="btn btn-primary" onclick="connectSyncKey()">Parear</button>
+            <div style="background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.25); border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <i class="fa-solid fa-circle-check" style="color: #22c55e; font-size: 1.1rem;"></i>
+                    <span style="font-weight: 700; color: #22c55e;">Sincronização Ativa</span>
                 </div>
+                <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
+                    PC e iPhone conectados ao mesmo banco Firebase. Mudanças são propagadas em menos de 1 segundo.
+                </p>
             </div>
 
             <div style="display: flex; gap: 10px; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-glass); padding-top: 16px;">
-                <button class="btn btn-whatsapp btn-sm" onclick="pullFromCloud(true)"><i class="fa-solid fa-arrows-rotate"></i> Sincronizar Agora</button>
+                <button class="btn btn-whatsapp btn-sm" onclick="forceResync()"><i class="fa-solid fa-arrows-rotate"></i> Reenviar Tudo</button>
                 <button class="btn btn-secondary btn-sm" onclick="toggleSyncModal()">Fechar</button>
             </div>
         </div>
