@@ -884,6 +884,22 @@
             filter: 'all' // all, pending, sent, replied, client
         };
 
+        async function fetchContactsFromServer() {
+            try {
+                const res = await fetch('contacts.json');
+                if (res.ok) {
+                    const defaultContacts = await res.json();
+                    if (defaultContacts && defaultContacts.length > 0) {
+                        campaignData.contacts = defaultContacts;
+                        localStorage.setItem('iptv_mass_campaign_seq', JSON.stringify(campaignData));
+                    }
+                }
+            } catch (err) {
+                console.error("Erro ao carregar contatos pré-carregados do servidor:", err);
+            }
+            initCampaignUI();
+        }
+
         window.addEventListener('load', () => {
             const savedData = localStorage.getItem('iptv_mass_campaign_seq');
             if (savedData) {
@@ -898,7 +914,13 @@
                     campaignData.includeMockLink = true;
                 }
                 
-                initCampaignUI();
+                if (!campaignData.contacts || campaignData.contacts.length === 0) {
+                    fetchContactsFromServer();
+                } else {
+                    initCampaignUI();
+                }
+            } else {
+                fetchContactsFromServer();
             }
         });
 
@@ -1453,24 +1475,11 @@
         }
 
         function resetCampaign() {
-            if (confirm("Tem certeza que deseja limpar todos os contatos carregados e progresso? Esta ação apagará tudo.")) {
+            if (confirm("Tem certeza que deseja limpar todo o progresso atual e recarregar a lista de 4.590 contatos do servidor?")) {
                 localStorage.removeItem('iptv_mass_campaign_seq');
-                campaignData = {
-                    contacts: [],
-                    templates: {
-                        1: "Olá {Nome}! Tudo bem? Sou o Thiago.\n\nReparei que você baixou o aplicativo IBO Player na sua TV. Gostaria de liberar seu teste premium grátis de 7 dias agora sem compromisso para você assistir?",
-                        2: "Perfeito, {Nome}! 🚀\n\nPara liberar seu acesso, abra o aplicativo IBO Player na tela da sua Smart TV. Ele mostrará dois códigos na tela chamados MAC Address e Device Key.\n\nMe envie uma foto dessa tela ou digite a numeração aqui para eu configurar o sinal no seu aplicativo agora!",
-                        3: "Prontinho, {Nome}! Seu sinal premium de 7 dias já foi ativado com sucesso! 📺✨\n\nAgora basta fechar e reabrir o IBO Player na sua Smart TV para aproveitar toda a nossa grade completa em alta definição. Qualquer dúvida me chame aqui!",
-                        4: "Olá, {Nome}! Tudo bem?\n\nPassando para saber o que achou do nosso teste premium do IBO Player e se a qualidade ficou legal na sua Smart TV? Estamos com uma oferta super especial de ativação hoje para você não perder o acesso! Vamos fechar?"
-                    },
-                    currentBatch: 0,
-                    filter: 'all'
-                };
-                
-                document.getElementById('panel-import').classList.remove('hidden');
-                document.getElementById('campaign-container').classList.add('hidden');
-                document.getElementById('btn-clear-all').classList.add('hidden');
-                document.getElementById('csv-file-input').value = '';
+                campaignData.contacts = [];
+                campaignData.currentBatch = 0;
+                fetchContactsFromServer();
             }
         }
 
