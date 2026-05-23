@@ -1518,7 +1518,7 @@
             if (!campaignData.syncKey) return;
             updateSyncStatus('Enviando...');
             try {
-                const response = await fetch(`https://kvdb.io/iptv_campanha_sync_v2/${campaignData.syncKey}`, {
+                const response = await fetch(`https://kvdb.io/22xdgL9dZdQQ33YKe7vL5S/${campaignData.syncKey}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(campaignData)
@@ -1538,7 +1538,7 @@
             if (!campaignData.syncKey) return;
             if (isManual) updateSyncStatus('Sincronizando...');
             try {
-                const response = await fetch(`https://kvdb.io/iptv_campanha_sync_v2/${campaignData.syncKey}`);
+                const response = await fetch(`https://kvdb.io/22xdgL9dZdQQ33YKe7vL5S/${campaignData.syncKey}`);
                 if (response.ok) {
                     const cloudData = await response.json();
                     if (cloudData && cloudData.contacts) {
