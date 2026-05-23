@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRM IPTV - Envios em Sequência</title>
     
+    <!-- Google Fonts Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- PWA Web App Settings -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff9f0a">
@@ -1275,26 +1283,25 @@
                         expObj.setHours(0,0,0,0);
                         isExpired = expObj <= todayObj;
                         
-                        expFormatted = `${expParts[2]}/${expParts[1]}/${expParts[0]}`;
-                    }
-
+                        ex                    const waPhone = item.phone.replace(/\D/g, '');
+                    
                     // Format Message 5 (Renewal text)
                     const msgText5 = (campaignData.templates[5] || '')
                         .replace(/{Nome}/g, clientFirstName)
                         .replace(/{Data}/g, expFormatted || 'hoje');
                     
-                    const waUrl5 = `https://api.whatsapp.com/send?phone=${item.phone}&text=${encodeURIComponent(msgText5)}`;
-
+                    const waUrl5 = `https://api.whatsapp.com/send?phone=${waPhone}&text=${encodeURIComponent(msgText5)}`;
+ 
                     // Highlight warning border for date
                     const warningStyle = isExpired ? 'border-color: #ef4444; color: #ef4444; background: rgba(239,68,68,0.05);' : '';
                     if (isExpired) {
                         tr.style.background = 'rgba(239, 68, 68, 0.05)';
                     }
-
+ 
                     tr.innerHTML = `
                         <td>${startIdx + index + 1}</td>
                         <td style="font-weight: 700; color: var(--text-light);">${item.name} ${isExpired ? '<span style="color: #ef4444; font-size: 0.7rem; font-weight: 900; margin-left: 5px; animation: pulse 1.5s infinite;"><i class="fa-solid fa-triangle-exclamation"></i> VENCIDO</span>' : ''}</td>
-                        <td style="font-family: monospace;">+${item.phone}</td>
+                        <td style="font-family: monospace;">+${item.phone.replace(/^\+/, '')}</td>
                         
                         <!-- Inputs for MAC & Key -->
                         <td>
@@ -1313,12 +1320,12 @@
                                 <option value="Servidor 3" ${item.server === 'Servidor 3' ? 'selected' : ''}>Servidor 3</option>
                             </select>
                         </td>
-
+ 
                         <!-- Date input expiration -->
                         <td>
                             <input type="date" class="search-input" style="padding: 4px 8px; font-size: 0.78rem; width: 100%; ${warningStyle}" value="${item.expiration || ''}" onchange="updateClientField(${item.originalIndex}, 'expiration', this.value)">
                         </td>
-
+ 
                         <!-- Pipeline Status transitions -->
                         <td style="text-align: center;">
                             <div class="crm-actions-container">
@@ -1326,7 +1333,7 @@
                                 <button class="crm-action-btn btn-to-replied" onclick="updateContactStatus(${item.originalIndex}, 'replied')" title="Mover para Respondido"><i class="fa-solid fa-comments"></i></button>
                             </div>
                         </td>
-
+ 
                         <!-- WhatsApp renewal shortcut -->
                         <td style="text-align: center;">
                             <a href="${waUrl5}" target="_blank" class="seq-send-btn btn-s5" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); width: 100%; font-size: 0.75rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 6px 10px; border-radius: 6px; box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25);" title="Cobrar Renovação">
@@ -1340,23 +1347,24 @@
                     if (item.status === 'sent') { badgeClass = 'badge-sent'; badgeText = 'Enviado'; }
                     else if (item.status === 'replied') { badgeClass = 'badge-replied'; badgeText = 'Respondeu'; }
                     else if (item.status === 'client') { badgeClass = 'badge-client'; badgeText = 'Cliente 👑'; }
-
-                    const waUrl1 = `https://api.whatsapp.com/send?phone=${item.phone}&text=${encodeURIComponent(campaignData.templates[1].replace(/{Nome}/g, clientFirstName))}`;
+ 
+                    const waPhone = item.phone.replace(/\D/g, '');
+                    const waUrl1 = `https://api.whatsapp.com/send?phone=${waPhone}&text=${encodeURIComponent(campaignData.templates[1].replace(/{Nome}/g, clientFirstName))}`;
                     
                     // Attach TV screen photo mockup link conditionally to template 2
                     let msgText2 = campaignData.templates[2].replace(/{Nome}/g, clientFirstName);
                     if (campaignData.includeMockLink) {
                         msgText2 += "\n\n📸 Veja este exemplo de foto da tela com os códigos que preciso:\nhttps://iptv-campanha.vercel.app/mock_tv_screen.png";
                     }
-                    const waUrl2 = `https://api.whatsapp.com/send?phone=${item.phone}&text=${encodeURIComponent(msgText2)}`;
+                    const waUrl2 = `https://api.whatsapp.com/send?phone=${waPhone}&text=${encodeURIComponent(msgText2)}`;
                     
-                    const waUrl3 = `https://api.whatsapp.com/send?phone=${item.phone}&text=${encodeURIComponent(campaignData.templates[3].replace(/{Nome}/g, clientFirstName))}`;
-                    const waUrl4 = `https://api.whatsapp.com/send?phone=${item.phone}&text=${encodeURIComponent(campaignData.templates[4].replace(/{Nome}/g, clientFirstName))}`;
-
+                    const waUrl3 = `https://api.whatsapp.com/send?phone=${waPhone}&text=${encodeURIComponent(campaignData.templates[3].replace(/{Nome}/g, clientFirstName))}`;
+                    const waUrl4 = `https://api.whatsapp.com/send?phone=${waPhone}&text=${encodeURIComponent(campaignData.templates[4].replace(/{Nome}/g, clientFirstName))}`;
+ 
                     tr.innerHTML = `
                         <td>${startIdx + index + 1}</td>
                         <td style="font-weight: 700; color: var(--text-light);">${item.name}</td>
-                        <td style="font-family: monospace;">+${item.phone}</td>
+                        <td style="font-family: monospace;">+${item.phone.replace(/^\+/, '')}</td>
                         <td><span class="badge ${badgeClass}">${badgeText}</span></td>
                         <td style="text-align: center;">
                             <div class="crm-actions-container">
