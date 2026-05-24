@@ -1,4 +1,4 @@
-.vercel
+# Ignore all Android compilation folders and local binaries
 System Volume Information/
 decompiled/
 tools/
