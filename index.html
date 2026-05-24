@@ -1,59 +1,60 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Ative seu teste grátis de 7 dias do melhor IPTV no IBO Player. Guia passo a passo simples de instalação para Smart TVs Samsung, LG, TCL, Android e TV Box.">
-    <meta name="keywords" content="IBO Player, teste grátis, IPTV IBO Player, 7 dias grátis, ativar IBO Player, MAC address, Device Key, IPTV premium">
-    <meta name="author" content="IBO Prime">
-    <title>IBO PRIME - Teste de 7 Dias Grátis no IBO Player</title>
+    <meta name="description" content="PlayTV IPTV Player - O melhor reprodutor de mídia para sua Smart TV, TV Box, Firestick e smartphone. Gerencie suas playlists M3U e ative seu dispositivo online.">
+    <meta name="keywords" content="PlayTV, PlayTV IPTV, Ibo Player Pro, ativar PlayTV, gerenciar playlist, IPTV player, smart tv player, M3U playlist, PlayTV apk">
+    <meta name="author" content="PlayTV">
+    <title>PlayTV - O Melhor Player de Mídia Geral | IPTV Player Oficial</title>
     
-    <!-- Google Fonts -->
+    <!-- Google Fonts Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
-    <!-- FontAwesome for Icons -->
+    <!-- FontAwesome para Ícones Premium -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- PWA Web App Settings -->
+    <!-- Configurações do PWA -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#ff9f0a">
+    <meta name="theme-color" content="#00D2D3">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="IBO Prime">
+    <meta name="apple-mobile-web-app-title" content="PlayTV">
     <link rel="apple-touch-icon" href="app_icon.png">
 
-    <!-- Custom CSS -->
+    <!-- CSS Personalizado -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Ambient glowing backgrounds matching the family room TV lighting -->
-    <div class="ambient-glow glow-orange"></div>
-    <div class="ambient-glow glow-blue"></div>
+    <!-- Fundos de brilho ambiente dinâmicos -->
+    <div class="ambient-glow glow-cyan"></div>
+    <div class="ambient-glow glow-magenta"></div>
+    <div class="ambient-glow glow-purple"></div>
 
-    <!-- Header Navigation -->
+    <!-- Cabeçalho Principal -->
     <header class="main-header">
         <div class="container header-container">
             <a href="#" class="logo">
-                <span class="logo-icon"><i class="fa-solid fa-tv"></i></span>
-                <span class="logo-text">IBO<span class="highlight">PRIME</span></span>
+                <img src="app_icon.png" alt="Logo PlayTV" class="logo-img">
+                <span class="logo-text">Play<span>TV</span></span>
             </a>
             
             <nav class="nav-menu">
-                <a href="#inicio" class="nav-link active">InÃ­cio</a>
-                <a href="#como-baixar" class="nav-link">Como Baixar</a>
-                <a href="#ativacao" class="nav-link">AtivaÃ§Ã£o</a>
-                <a href="#planos" class="nav-link">Planos</a>
-                <a href="#gerenciar-playlist" class="nav-link">Gerenciar Playlist</a>
-                <a href="#faq" class="nav-link">DÃºvidas</a>
+                <a href="#inicio" class="nav-link active">Início</a>
+                <a href="#como-usar" class="nav-link">Como Usar</a>
+                <a href="#gerenciar" class="nav-link">Gerenciar Listas</a>
+                <a href="#ativar" class="nav-link">Ativação</a>
+                <a href="#faq" class="nav-link">Dúvidas Frequentes</a>
+                <a href="#contato" class="nav-link">Contato</a>
             </nav>
             
             <div class="header-actions">
-                <a href="#ativacao" class="btn btn-primary btn-glow">
-                    <span class="btn-text">ATIVAR IBO PLAYER</span>
-                    <i class="fa-solid fa-bolt"></i>
+                <a href="#gerenciar" class="btn btn-primary">
+                    <span>Portal do Cliente</span>
+                    <i class="fa-solid fa-user-gear"></i>
                 </a>
             </div>
             
@@ -63,685 +64,572 @@
         </div>
     </header>
 
-    <!-- Mobile Drawer Navigation -->
+    <!-- Menu Lateral Mobile -->
     <div class="mobile-drawer">
         <div class="drawer-header">
             <a href="#" class="logo">
-                <span class="logo-icon"><i class="fa-solid fa-tv"></i></span>
-                <span class="logo-text">IBO<span class="highlight">PRIME</span></span>
+                <img src="app_icon.png" alt="Logo PlayTV" class="logo-img">
+                <span class="logo-text">Play<span>TV</span></span>
             </a>
             <button class="drawer-close-btn"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="drawer-content">
-            <a href="#inicio" class="drawer-link">InÃ­cio</a>
-            <a href="#como-baixar" class="drawer-link">Como Baixar</a>
-            <a href="#ativacao" class="drawer-link">AtivaÃ§Ã£o</a>
-            <a href="#planos" class="drawer-link">Planos</a>
-            <a href="#gerenciar-playlist" class="drawer-link">Gerenciar Playlist</a>
-            <a href="#faq" class="drawer-link">DÃºvidas</a>
-            <a href="#ativacao" class="btn btn-primary btn-full text-center">
-                <span>ATIVAR TESTE AGORA</span>
-                <i class="fa-solid fa-bolt"></i>
+            <a href="#inicio" class="drawer-link">Início</a>
+            <a href="#como-usar" class="drawer-link">Como Usar</a>
+            <a href="#gerenciar" class="drawer-link">Gerenciar Listas</a>
+            <a href="#ativar" class="drawer-link">Ativação</a>
+            <a href="#faq" class="drawer-link">Dúvidas Frequentes</a>
+            <a href="#contato" class="drawer-link">Contato</a>
+            <a href="#gerenciar" class="btn btn-primary btn-full text-center">
+                <span>Portal do Cliente</span>
+                <i class="fa-solid fa-user-gear"></i>
             </a>
         </div>
     </div>
 
     <main>
         
-        <!-- Hero Section (Directly inspired by the warm, vibrant image layout) -->
+        <!-- Seção Hero -->
         <section id="inicio" class="hero-section">
-            <div class="hero-bg-image-wrapper">
-                <div class="hero-overlay"></div>
-                <img src="hero_banner.jpg" alt="Família assistindo TV" class="hero-bg-image">
-            </div>
-            
             <div class="container hero-container">
-                <div class="hero-text-content">
-                    <div class="badge-premium animate-pulse">
-                        <i class="fa-solid fa-gift text-warning"></i>
-                        <span>TESTE TOTALMENTE GRÁTIS POR 7 DIAS!</span>
-                    </div>
-                    
-                    <h1 class="hero-title">
-                        TESTE GRÁTIS DE 7 DIAS!<br>
-                        <span class="gradient-text">LIBERE AGORA O MELHOR IPTV!</span>
-                    </h1>
-                    
-                    <p class="hero-subtitle">
-                        Instale o aplicativo <strong>IBO Player</strong> em sua Smart TV e tenha acesso imediato a todos os canais fechados, esportes, filmes e séries em alta definição. Sem travamentos, sem antenas!
-                    </p>
-                    
-                    <!-- Left features list exactly as shown in the user's reference image -->
-                    <div class="hero-bullets-list">
-                        <div class="bullet-item">
-                            <span class="bullet-tag">CANAIS HD/4K SEM TRAVAR</span>
-                        </div>
-                        <div class="bullet-item">
-                            <span class="bullet-tag">SÉRIES E FILMES EXCLUSIVOS</span>
-                        </div>
-                        <div class="bullet-item">
-                            <span class="bullet-tag">TODOS OS ESPORTES</span>
-                        </div>
-                        <div class="bullet-item">
-                            <span class="bullet-tag">INSTALAÇÃO RÁPIDA!</span>
-                        </div>
-                    </div>
-                    
-                    <div class="hero-cta-group">
-                        <a href="#ativacao" class="btn btn-warning btn-lg btn-glow btn-main-cta">
-                            <i class="fa-solid fa-circle-play"></i>
-                            <span class="btn-text">QUERO MEU TESTE GRÁTIS!</span>
-                        </a>
-                    </div>
-                    
-                    <div class="hero-subtext">
-                        <span>EXPERIMENTE POR 7 DIAS SEM COMPROMISSO!</span>
-                    </div>
-                </div>
-                
-                <!-- Screen UI element explaining the IBO Player activation info -->
-                <div class="hero-visual-content">
-                    <div class="tv-glow-hologram"></div>
-                    <div class="tv-mockup">
-                        <div class="tv-screen">
-                            <div class="ibo-logo-screen">
-                                <span class="ibo-logo-badge">IBO PLAYER</span>
-                            </div>
-                            <div class="ibo-info-panel">
-                                <h4 class="ibo-title"><i class="fa-solid fa-shield-halved"></i> App Baixado com Sucesso!</h4>
-                                <p class="ibo-desc">Para liberar seus 7 dias de teste grátis, localize os códigos de ativação abaixo na tela da sua TV:</p>
-                                
-                                <div class="ibo-codes-box">
-                                    <div class="ibo-code-row highlight-row">
-                                        <span class="label">MAC Address:</span>
-                                        <span class="value text-cyan" id="tv-mac-placeholder">aa:bb:cc:11:22:33</span>
-                                        <span class="focus-indicator"><i class="fa-solid fa-magnifying-glass-plus"></i></span>
-                                    </div>
-                                    <div class="ibo-code-row highlight-row">
-                                        <span class="label">Device Key:</span>
-                                        <span class="value text-warning" id="tv-key-placeholder">987654</span>
-                                        <span class="focus-indicator"><i class="fa-solid fa-magnifying-glass-plus"></i></span>
-                                    </div>
-                                </div>
-                                <div class="ibo-arrow-hint">
-                                    <i class="fa-solid fa-arrow-down animate-bounce"></i>
-                                    <span>Tire uma foto desta tela e nos envie abaixo</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tv-base"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Guide Section: Manual do IBO Player (Extremamente Didático) -->
-        <section id="como-baixar" class="guide-section">
-            <div class="container">
-                <div class="section-header text-center">
-                    <span class="section-tag">MANUAL PASSO A PASSO</span>
-                    <h2>Como baixar o IBO Player na sua TV</h2>
-                    <p class="section-subtitle">O IBO Player é o aplicativo mais moderno e rápido do mercado. Siga estes passos simples e configure em menos de 2 minutos.</p>
-                </div>
-                
-                <div class="guide-tabs">
-                    <button class="tab-btn active" data-target="tab-samsung-lg">
-                        <i class="fa-solid fa-tv"></i>
-                        <span>Smart TV (Samsung ou LG)</span>
-                    </button>
-                    <button class="tab-btn" data-target="tab-android-tcl">
-                        <i class="fa-solid fa-window-maximize"></i>
-                        <span>Android TV (TCL, Philips, etc.)</span>
-                    </button>
-                    <button class="tab-btn" data-target="tab-box-fire">
-                        <i class="fa-solid fa-box"></i>
-                        <span>TV Box / Fire Stick</span>
-                    </button>
-                </div>
-                
-                <div class="tab-contents glass-panel">
-                    
-                    <!-- Tab Samsung & LG -->
-                    <div class="tab-pane active" id="tab-samsung-lg">
-                        <div class="pane-grid">
-                            <div class="pane-text">
-                                <h3>Instalação Rápida em Smart TV Samsung ou LG</h3>
-                                <p class="pane-lead">Nas TVs Samsung e LG, o aplicativo está disponível de forma oficial na loja padrão do seu aparelho.</p>
-                                
-                                <ul class="step-list">
-                                    <li>
-                                        <div class="step-circle">1</div>
-                                        <div class="step-info">
-                                            <h4>Abra a App Store</h4>
-                                            <p>No controle remoto da TV, aperte o botão "Home" (casinha) e entre na <strong>APPs</strong> (Samsung) ou <strong>Content Store</strong> (LG).</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="step-circle">2</div>
-                                        <div class="step-info">
-                                            <h4>Busque por "IBO Player"</h4>
-                                            <p>Vá na lupa de pesquisa no topo e digite **IBO Player**. Clique na lupa para pesquisar.</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="step-circle">3</div>
-                                        <div class="step-info">
-                                            <h4>Instale e Abra</h4>
-                                            <p>Clique no botão **Instalar** (ou Download). Após concluir, clique em **Abrir** para iniciar o aplicativo.</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="step-circle">4</div>
-                                        <div class="step-info">
-                                            <h4>Tire a Foto com os Códigos</h4>
-                                            <p>Assim que o app abrir, você verá o logotipo do IBO Player e os códigos **MAC Address** e **Device Key** em destaque. Tire uma foto nítida dessa tela com o seu celular.</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            
-                            <div class="pane-media">
-                                <div class="guide-visual-card">
-                                    <div class="gvc-badge">LOJA DE APPS DA SMART TV</div>
-                                    <i class="fa-solid fa-store accent-icon text-orange"></i>
-                                    <div class="gvc-mock-search">
-                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                        <span>ibo player</span>
-                                    </div>
-                                    <div class="gvc-install-sim">
-                                        <div class="gvc-app-logo-box">IBO</div>
-                                        <div class="gvc-app-details">
-                                            <strong>IBO Player</strong>
-                                            <span>Media Player Premium</span>
-                                        </div>
-                                        <button class="gvc-btn-download"><i class="fa-solid fa-download"></i> Baixar Grátis</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Tab Android TV -->
-                    <div class="tab-pane" id="tab-android-tcl">
-                        <div class="pane-grid">
-                            <div class="pane-text">
-                                <h3>Instalação Rápida em Android TV (TCL, Philips, etc.)</h3>
-                                <p class="pane-lead">Nas televisões rodando sistema Android ou Google TV, o download é feito pela Play Store.</p>
-                                
-                                <ul class="step-list">
-                                    <li>
-                                        <div class="step-circle">1</div>
-                                        <div class="step-info">
-                                            <h4>Abra a Google Play Store</h4>
-                                            <p>Navegue na tela inicial da TV até a aba de **Aplicativos** ou abra diretamente o app da **Google Play Store**.</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="step-circle">2</div>
-                                        <div class="step-info">
-                                            <h4>Busque por "IBO Player"</h4>
-                                            <p>Utilize a busca por voz ou teclado e digite **IBO Player**. Selecione o aplicativo correspondente.</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="step-circle">3</div>
-                                        <div class="step-info">
-                                            <h4>Instale e encontre os dados</h4>
-                                            <p>Clique em **Instalar**. Abra o app e registre a foto mostrando a tela com as informações de **MAC** e **Device Key**.</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            
-                            <div class="pane-media">
-                                <div class="guide-visual-card">
-                                    <div class="gvc-badge text-cyan">GOOGLE PLAY STORE</div>
-                                    <i class="fa-brands fa-google-play accent-icon text-cyan"></i>
-                                    <div class="gvc-app-mock-android">
-                                        <div class="gvc-progress-status">Instalando aplicativo...</div>
-                                        <div class="gvc-progress-bar">
-                                            <div class="gvc-progress-fill animate-progress"></div>
-                                        </div>
-                                        <div class="gvc-app-percent">82%</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Tab TV Box & Firestick -->
-                    <div class="tab-pane" id="tab-box-fire">
-                        <div class="pane-grid">
-                            <div class="pane-text">
-                                <h3>Instalação em TV Box, Fire Stick ou Mi Stick</h3>
-                                <p class="pane-lead">Se o IBO Player não estiver na loja oficial do seu aparelho, você pode baixar pelo aplicativo "Downloader" facilmente.</p>
-                                
-                                <ul class="step-list">
-                                    <li>
-                                        <div class="step-circle">1</div>
-                                        <div class="step-info">
-                                            <h4>Baixe o Aplicativo "Downloader"</h4>
-                                            <p>Caso não tenha, procure por **Downloader** na loja do seu aparelho (ícone laranja) e instale.</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="step-circle">2</div>
-                                        <div class="step-info">
-                                            <h4>Digite o Código de Download</h4>
-                                            <p>Abra o Downloader e no campo de URL digite o código de download direto: <strong class="text-warning">982744</strong> (ou a URL direta) e clique em **GO**.</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="step-circle">3</div>
-                                        <div class="step-info">
-                                            <h4>Instale o IBO Player APK</h4>
-                                            <p>O download começará automaticamente. Quando terminar, selecione **Instalar** e abra o app para visualizar seus códigos de ativação.</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            
-                            <div class="pane-media">
-                                <div class="guide-visual-card">
-                                    <div class="gvc-badge text-warning">APLICATIVO DOWNLOADER</div>
-                                    <i class="fa-solid fa-cloud-arrow-down accent-icon text-warning"></i>
-                                    <div class="downloader-mock">
-                                        <div class="downloader-head">Enter a URL or Short Code:</div>
-                                        <div class="downloader-input-field">
-                                            <span>https://</span>
-                                            <strong class="text-warning">982744</strong>
-                                        </div>
-                                        <div class="downloader-btn">Go</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </section>
-
-        <!-- Activation Funnel: Envio de Códigos do Cliente (Grande Destaque do Fluxo!) -->
-        <section id="ativacao" class="activation-section">
-            <div class="container">
-                <div class="activation-grid">
-                    
-                    <!-- Left: Interactive Upload Form Panel -->
-                    <div class="activation-form-panel glass-panel">
-                        <div class="af-header text-center">
-                            <span class="af-badge"><i class="fa-solid fa-circle-check"></i> FUNIL DE ATIVAÇÃO RÁPIDA</span>
-                            <h2>Envie Seus Códigos de Ativação</h2>
-                            <p>Preencha os campos abaixo com as informações exibidas no seu IBO Player ou tire e envie uma foto da tela da sua TV.</p>
+                <div class="hero-grid">
+                    <div class="hero-text">
+                        <div class="badge-brand">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>REPRODUTOR DE MÍDIA 100% SEGURO & PROFISSIONAL</span>
                         </div>
                         
-                        <form id="ibo-activation-form" class="af-form">
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="client-name"><i class="fa-solid fa-user"></i> Seu Nome</label>
-                                    <input type="text" id="client-name" placeholder="Ex: João Silva" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="tv-brand"><i class="fa-solid fa-tv"></i> Marca da sua TV</label>
-                                    <select id="tv-brand" required>
-                                        <option value="" disabled selected>Selecione...</option>
-                                        <option value="Samsung">Smart TV Samsung</option>
-                                        <option value="LG">Smart TV LG</option>
-                                        <option value="TCL">Smart TV TCL</option>
-                                        <option value="Philips">Smart TV Philips</option>
-                                        <option value="TVBox">TV Box / FireStick</option>
-                                        <option value="Outro">Outro Dispositivo</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <!-- Interactive Codes input fields -->
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="mac-address"><i class="fa-solid fa-barcode"></i> MAC Address (Opcional)</label>
-                                    <input type="text" id="mac-address" placeholder="Ex: aa:bb:cc:dd:ee:ff" maxlength="17">
-                                </div>
-                                <div class="form-group">
-                                    <label for="device-key"><i class="fa-solid fa-key"></i> Device Key (Opcional)</label>
-                                    <input type="text" id="device-key" placeholder="Ex: 123456" maxlength="8">
-                                </div>
-                            </div>
-                            
-                            <!-- Photo Uploader Section (Highly interactive!) -->
-                            <div class="form-group">
-                                <label><i class="fa-solid fa-camera"></i> Foto da Tela da TV com Códigos (Muito Recomendado)</label>
-                                <div class="photo-upload-zone" id="photo-upload-container">
-                                    <input type="file" id="photo-input" accept="image/*" class="hidden-file-input">
-                                    
-                                    <div class="upload-idle" id="upload-idle-state">
-                                        <i class="fa-solid fa-images upload-cloud-icon"></i>
-                                        <h4>Clique aqui para Enviar a Foto</h4>
-                                        <p>Selecione a foto da tela da TV que você tirou com o celular</p>
-                                        <span class="btn btn-secondary btn-sm">Escolher Arquivo</span>
-                                    </div>
-                                    
-                                    <div class="upload-preview" id="upload-preview-state" style="display: none;">
-                                        <div class="preview-img-container">
-                                            <img src="" id="upload-preview-img" alt="Preview da TV">
-                                            <button type="button" class="btn-remove-preview" id="btn-remove-photo"><i class="fa-solid fa-circle-xmark"></i></button>
-                                        </div>
-                                        <div class="preview-info">
-                                            <span class="file-name" id="preview-file-name">foto-tv.jpg</span>
-                                            <span class="file-status text-success"><i class="fa-solid fa-circle-check"></i> Foto pronta para envio!</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-action-wrapper text-center">
-                                <button type="submit" class="btn btn-warning btn-lg btn-glow btn-full text-center" id="btn-form-submit">
-                                    <i class="fa-brands fa-whatsapp"></i>
-                                    <span>ENVIAR CÓDIGOS E LIBERAR TESTE GRÁTIS</span>
-                                </button>
-                                <span class="whatsapp-disclaimer"><i class="fa-solid fa-shield-halved"></i> Clique e você será redirecionado ao nosso WhatsApp de Ativação Instantânea.</span>
-                            </div>
-                            
-                        </form>
+                        <h1 class="hero-title">
+                            Nós Oferecemos o Melhor<br>
+                            <span>Player de Mídia Geral</span>
+                        </h1>
+                        
+                        <p class="hero-subtitle">
+                            O PlayTV é um reprodutor de mídia avançado e extremamente rápido, projetado para Smart TVs, TV Boxes, smartphones e tablets. Desfrute de transmissões ultra fluidas com suporte completo a 4K UHD.
+                        </p>
+                        
+                        <div class="disclaimer-box">
+                            <i class="fa-solid fa-triangle-exclamation" style="color: var(--magenta); margin-right: 6px;"></i>
+                            <strong>Aviso Importante:</strong> Nós não vendemos ou oferecemos qualquer conteúdo de transmissão, canais, listas de canais ou assinaturas. Por favor, utilize suas próprias listas M3U adquiridas legalmente.
+                        </div>
+                        
+                        <div class="download-cta-group">
+                            <a href="./playtv.apk" class="btn btn-magenta btn-lg" download>
+                                <i class="fa-solid fa-download"></i>
+                                <span>Baixar APK (Direto)</span>
+                            </a>
+                            <a href="https://shorturl.at/nAOUY" target="_blank" class="btn btn-secondary btn-lg">
+                                <i class="fa-solid fa-link"></i>
+                                <span>Link Alternativo</span>
+                            </a>
+                        </div>
+                        
+                        <div class="download-info-list">
+                            <span><i class="fa-solid fa-check-double"></i> Suporte Multilíngue</span>
+                            <span><i class="fa-solid fa-tv"></i> Pronto para Smart TVs</span>
+                            <span><i class="fa-solid fa-bolt"></i> Motor Ultra Rápido e Estável</span>
+                        </div>
                     </div>
                     
-                    <!-- Right: Clear explanatory side-panel showing instructions -->
-                    <div class="activation-info-side">
-                        <div class="visual-help-card glass-panel">
-                            <h3>Por que enviar a foto da tela? 📸</h3>
-                            <p>O aplicativo **IBO Player** é ativado diretamente nos nossos servidores através dos códigos **MAC Address** e **Device Key** do seu aparelho.</p>
-                            
-                            <ul class="help-benefits-list">
-                                <li>
-                                    <i class="fa-solid fa-user-gear text-orange"></i>
-                                    <div>
-                                        <strong>Sem Complicação</strong>
-                                        <span>Você não precisa digitar links grandes ou configurar nada. Nossa equipe faz toda a configuração técnica por você no sistema!</span>
+                    <!-- Simulador de Tela de Dispositivo -->
+                    <div class="hero-visual">
+                        <div class="tv-device-glow"></div>
+                        <div class="tv-container">
+                            <div class="tv-screen-content">
+                                <img src="app_icon.png" alt="Logo na Tela PlayTV" class="tv-screen-logo">
+                                <h3 class="tv-screen-title">PlayTV IPTV Player</h3>
+                                <p class="tv-screen-subtitle">UNLIMITED STREAMING</p>
+                                
+                                <div class="tv-screen-codes">
+                                    <div class="tv-code-item">
+                                        <span class="lbl">Endereço MAC:</span>
+                                        <span class="val" style="color: var(--cyan);">00:A1:B2:C3:D4:E5</span>
                                     </div>
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-clock text-cyan"></i>
-                                    <div>
-                                        <strong>Ativação em 1 Minuto</strong>
-                                        <span>Assim que recebermos a foto, nossa equipe vincula a grade de canais ao seu aparelho de forma instantânea.</span>
+                                    <div class="tv-code-item">
+                                        <span class="lbl">Chave Device Key:</span>
+                                        <span class="val" style="color: var(--magenta);">849175</span>
                                     </div>
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-circle-play text-warning"></i>
-                                    <div>
-                                        <strong>É só abrir e assistir!</strong>
-                                        <span>Após nossa ativação no suporte, basta você fechar e reabrir o app na sua TV. Toda a grade de canais já estará carregada na tela.</span>
-                                    </div>
-                                </li>
-                            </ul>
-                            
-                            <!-- Small mockup showing screen code reference -->
-                            <div class="mockup-screen-helper">
-                                <span>A foto deve mostrar claramente esta tela do IBO:</span>
-                                <div class="msh-screen-box">
-                                    <div class="msh-top">IBO Player</div>
-                                    <div class="msh-highlight">
-                                        <div class="msh-row">MAC: <span class="text-cyan">AA:BB:CC:11:22:33</span></div>
-                                        <div class="msh-row">Device Key: <span class="text-warning">123456</span></div>
-                                    </div>
+                                </div>
+                                
+                                <div class="tv-screen-arrow">
+                                    <i class="fa-solid fa-arrow-down-long"></i>
+                                    <span>Gerencie suas configurações abaixo</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
                 </div>
             </div>
         </section>
 
-        <!-- Subscription Plans Section -->
-        <section id="planos" class="pricing-section">
+        <!-- Seção de Recursos -->
+        <section id="recursos" class="section">
             <div class="container">
-                <div class="section-header text-center">
-                    <span class="section-tag">APÓS OS 7 DIAS GRÁTIS</span>
-                    <h2>Escolha o seu plano de canais premium</h2>
-                    <p class="section-subtitle">Aproveite os melhores servidores sem travamentos. Todos os planos incluem a ativação técnica no seu IBO Player.</p>
+                <div class="section-header">
+                    <span class="section-tag">Recursos Premium</span>
+                    <h2 class="section-title">Projetado para <span>Navegação Fluida</span></h2>
+                    <p class="section-subtitle">O PlayTV vem completo com controles avançados e otimizações internas para transmissões rápidas e sem travamentos.</p>
                 </div>
                 
-                <div class="pricing-grid">
-                    
-                    <!-- Plan 1 -->
-                    <div class="price-card glass-panel">
-                        <div class="card-badge">MAIS POPULAR</div>
-                        <h3>Plano Bronze</h3>
-                        <div class="period">Acesso por 30 Dias</div>
-                        <div class="price-wrap">
-                            <span class="currency">R$</span>
-                            <span class="price">35</span>
-                            <span class="cents">,90</span>
-                            <span class="duration">/mês</span>
+                <div class="features-grid">
+                    <div class="feature-card glass-panel">
+                        <div class="feature-icon-wrapper">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
                         </div>
-                        <ul class="plan-features">
-                            <li><i class="fa-solid fa-check text-success"></i> Grade Completa de Canais</li>
-                            <li><i class="fa-solid fa-check text-success"></i> Filmes e Séries On Demand atualizados</li>
-                            <li><i class="fa-solid fa-check text-success"></i> Servidores Anti-Buffering</li>
-                            <li><i class="fa-solid fa-check text-success"></i> 1 Tela Conectada</li>
-                            <li><i class="fa-solid fa-check text-success"></i> Suporte Especializado via WhatsApp</li>
-                            <li class="disabled"><i class="fa-solid fa-xmark text-danger"></i> Imagem com Resolução Ultra HD/4K</li>
-                        </ul>
-                        <div class="plan-action">
-                            <a href="#" class="btn btn-secondary btn-full btn-buy" data-plan="Bronze - Mensal" data-price="R$ 35,90">
-                                <span>Assinar Plano Bronze</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-                        </div>
+                        <h3>Interface Simples & Moderna</h3>
+                        <p>Fornecemos uma interface altamente intuitiva e limpa, proporcionando a melhor experiência visual de navegação.</p>
                     </div>
                     
-                    <!-- Plan 2 - Highlighted Orange/Gold like reference image -->
-                    <div class="price-card glass-panel popular">
-                        <div class="card-badge">CUSTO-BENEFÍCIO ⭐</div>
-                        <h3>Plano Prata</h3>
-                        <div class="period">Acesso por 90 Dias (3 Meses)</div>
-                        <div class="price-wrap">
-                            <span class="currency">R$</span>
-                            <span class="price">89</span>
-                            <span class="cents">,90</span>
-                            <span class="duration">/trimestre</span>
+                    <div class="feature-card glass-panel">
+                        <div class="feature-icon-wrapper">
+                            <i class="fa-solid fa-expand"></i>
                         </div>
-                        <div class="discount-pill">Economize mais de 15%</div>
-                        <ul class="plan-features">
-                            <li><i class="fa-solid fa-check text-success"></i> Grade Completa de Canais</li>
-                            <li><i class="fa-solid fa-check text-success"></i> Filmes e Séries On Demand atualizados</li>
-                            <li><i class="fa-solid fa-check text-success"></i> Grade completa SD, HD, FHD & 4K</li>
-                            <li><i class="fa-solid fa-check text-success"></i> Servidor Dedicado Ultra VIP</li>
-                            <li><i class="fa-solid fa-check text-success"></i> 1 Tela Conectada</li>
-                            <li><i class="fa-solid fa-check text-success"></i> Suporte Prioritário VIP 24h</li>
-                        </ul>
-                        <div class="plan-action">
-                            <a href="#" class="btn btn-warning btn-full btn-glow btn-buy" data-plan="Prata - Trimestral" data-price="R$ 89,90">
-                                <span>Assinar Plano Prata</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-                        </div>
+                        <h3>Resolução Total</h3>
+                        <p>Totalmente otimizado para suportar todas as resoluções de tela, incluindo Full HD, 4K e 8K HDR em Smart TVs e celulares.</p>
                     </div>
                     
-                    <!-- Plan 3 -->
-                    <div class="price-card glass-panel">
-                        <div class="card-badge">MAIOR DESCONTO</div>
-                        <h3>Plano Ouro</h3>
-                        <div class="period">Acesso por 180 Dias (6 Meses)</div>
-                        <div class="price-wrap">
-                            <span class="currency">R$</span>
-                            <span class="price">149</span>
-                            <span class="cents">,90</span>
-                            <span class="duration">/semestre</span>
+                    <div class="feature-card glass-panel">
+                        <div class="feature-icon-wrapper">
+                            <i class="fa-solid fa-bolt-lightning"></i>
                         </div>
-                        <div class="discount-pill">Equivale a apenas R$ 24,98 por mês!</div>
-                        <ul class="plan-features">
-                            <li><i class="fa-solid fa-check text-success"></i> Grade Completa de Canais</li>
-                            <li><i class="fa-solid fa-check text-success"></i> Filmes e Séries On Demand atualizados</li>
-                            <li><i class="fa-solid fa-check text-success"></i> Grade completa SD, HD, FHD & 4K</li>
-                            <li><i class="fa-solid fa-check text-success"></i> Servidor Dedicado Ultra VIP</li>
-                            <li><i class="fa-solid fa-check text-success"></i> 1 Tela Conectada</li>
-                            <li><i class="fa-solid fa-check text-success"></i> Suporte Prioritário VIP 24h</li>
-                            <li><i class="fa-solid fa-check text-success"></i> Lista Backup Extra de canais inclusa</li>
-                        </ul>
-                        <div class="plan-action">
-                            <a href="#" class="btn btn-secondary btn-full btn-buy" data-plan="Ouro - Semestral" data-price="R$ 149,90">
-                                <span>Assinar Plano Ouro</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-                        </div>
+                        <h3>Transmissão sem Travamentos</h3>
+                        <p>Integra-se nativamente com os players MX e VLC externos ou internos, garantindo carregamento instantâneo da mídia.</p>
                     </div>
                     
-                </div>
-                
-                <!-- Guarantee Box -->
-                <div class="guarantee-box glass-panel text-center">
-                    <div class="guarantee-icon">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <div class="guarantee-text">
-                        <h3>Garantia de Satisfação Total</h3>
-                        <p>O IBO Player é o melhor aplicativo da atualidade, e nossos servidores contam com a mais avançada tecnologia anti-travamento. Oferecemos 7 dias de garantia incondicional. Se você não ficar satisfeito com a velocidade do sinal ou grade de canais, solicite o reembolso na hora no nosso suporte.</p>
+                    <div class="feature-card glass-panel">
+                        <div class="feature-icon-wrapper">
+                            <i class="fa-solid fa-language"></i>
+                        </div>
+                        <h3>Seleção Multilíngue</h3>
+                        <p>Troque de idioma de áudio e ative legendas externas em tempo real em filmes e séries de TV compatíveis.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- FAQ Accordion -->
-        <section id="faq" class="faq-section">
-            <div class="container faq-container">
-                <div class="section-header text-center">
-                    <span class="section-tag">TIRE SUAS DÚVIDAS</span>
-                    <h2>Perguntas frequentes</h2>
-                    <p class="section-subtitle">Ficou com alguma dúvida? Confira as perguntas mais comuns de nossos usuários sobre o IBO Player.</p>
-                </div>
-                
-                <div class="faq-list">
-                    
-                    <div class="faq-item glass-panel">
-                        <button class="faq-question">
-                            <span>O que é o IBO Player?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </button>
-                        <div class="faq-answer">
-                            <p>O IBO Player é um reprodutor de mídia premium, muito rápido e estável, feito para carregar listas de IPTV em Smart TVs, TV Box e dispositivos móveis. Ele não fornece conteúdos por conta própria; você baixa o aplicativo e nós, como provedores de IPTV, inserimos e ativamos a grade de canais completa diretamente no sistema da sua TV usando os códigos MAC e Device Key do seu aparelho.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="faq-item glass-panel">
-                        <button class="faq-question">
-                            <span>O teste de 7 dias é realmente grátis?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </button>
-                        <div class="faq-answer">
-                            <p>Sim! Não cobramos nada para você testar nossos canais e o IBO Player durante 7 dias. Você instala o app, nos envia a foto com a numeração exibida e nós ativamos seu teste grátis imediatamente. Não há necessidade de cadastrar cartão de crédito ou dados de pagamento para testar.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="faq-item glass-panel">
-                        <button class="faq-question">
-                            <span>Como encontro o MAC e Device Key no IBO Player?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </button>
-                        <div class="faq-answer">
-                            <p>Assim que você abrir o aplicativo IBO Player pela primeira vez em seu aparelho, você verá na tela inicial a logo do aplicativo e, logo abaixo, duas linhas em destaque: <strong>MAC:</strong> (sequência de letras e números divididos por dois pontos) e <strong>Device Key:</strong> (uma chave numérica de 6 dígitos). Esses são os dados que você deve nos enviar ou fotografar.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="faq-item glass-panel">
-                        <button class="faq-question">
-                            <span>O aplicativo IBO Player é grátis para sempre?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </button>
-                        <div class="faq-answer">
-                            <p>O IBO Player oferece um período de teste gratuito de 7 dias do próprio aplicativo (licença). Após esse período, ele custa uma taxa anual muito pequena (cerca de R$ 10 a R$ 15) para ativação vitalícia ou anual do aplicativo. Na compra de qualquer um dos nossos planos a partir do Prata (Trimestral), nossa equipe realiza a ativação da licença do IBO Player para você como cortesia de brinde!</p>
-                        </div>
-                    </div>
-                    
-                    <div class="faq-item glass-panel">
-                        <button class="faq-question">
-                            <span>Preciso de computador ou pen drive para ativar?</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </button>
-                        <div class="faq-answer">
-                            <p>Não! Você faz tudo direto pela sua TV e celular. Baixa o app na loja da TV, tira a foto com os códigos na tela e envia em nosso formulário ou WhatsApp. Nós ativamos tudo direto no nosso sistema e, em poucos segundos, os canais aparecem automaticamente na sua Smart TV. Simples assim!</p>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </section>
-
-        <!-- SEÇÃO GERENCIAR PLAYLIST -->
-        <section id="gerenciar-playlist" class="section playlist-section">
+        <!-- Seção de Guias de Instalação -->
+        <section id="como-usar" class="section">
             <div class="container">
-                <div class="section-header text-center">
-                    <span class="sub-title">PORTAL DO CLIENTE</span>
-                    <h2 class="title">Gerenciar Minhas <span class="highlight">Playlists</span></h2>
-                    <p class="description">
-                        Adicione, remova ou edite suas listas de reprodução (M3U ou Xtream Codes) diretamente na sua TV usando seu MAC e Device Key.
-                    </p>
+                <div class="section-header">
+                    <span class="section-tag">Guia Passo a Passo</span>
+                    <h2 class="section-title">Como Instalar <span>nas Smart TVs</span></h2>
+                    <p class="section-subtitle">Siga os tutoriais abaixo para configurar o aplicativo PlayTV no seu aparelho favorito em menos de 2 minutos.</p>
                 </div>
-
-                <div class="playlist-portal-card glass-panel" style="max-width: 800px; margin: 0 auto; padding: 30px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);">
-                    <!-- Estado 1: Login -->
-                    <div id="playlist-login-state" class="portal-state active">
-                        <form id="playlist-login-form" class="portal-form">
-                            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-                                <div class="form-group">
-                                    <label for="portal-mac" style="display: block; font-weight: 700; margin-bottom: 8px; color: var(--text-light);"><i class="fa-solid fa-barcode" style="color: var(--primary);"></i> MAC Address</label>
-                                    <input type="text" id="portal-mac" placeholder="Ex: aa:bb:cc:dd:ee:ff" required maxlength="17" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); border-radius: 8px; color: var(--text-light);">
+                
+                <div class="install-tabs">
+                    <button class="tab-btn active" data-target="tab-samsung">
+                        <i class="fa-solid fa-tv"></i>
+                        <span>Samsung Smart TV</span>
+                    </button>
+                    <button class="tab-btn" data-target="tab-lg">
+                        <i class="fa-solid fa-window-restore"></i>
+                        <span>LG Smart TV</span>
+                    </button>
+                    <button class="tab-btn" data-target="tab-android">
+                        <i class="fa-solid fa-box"></i>
+                        <span>Android TV / Box</span>
+                    </button>
+                    <button class="tab-btn" data-target="tab-firestick">
+                        <i class="fa-solid fa-fire-burner"></i>
+                        <span>Amazon Firestick</span>
+                    </button>
+                </div>
+                
+                <div class="tab-panes">
+                    <!-- Guia Samsung -->
+                    <div class="tab-pane active" id="tab-samsung">
+                        <div class="install-guide-card glass-panel">
+                            <div class="install-steps">
+                                <div class="install-step">
+                                    <div class="step-num">1</div>
+                                    <div class="step-text">
+                                        <h4>Busque na Loja Samsung Apps</h4>
+                                        <p>Ligue sua TV Samsung, abra a App Store e pesquise por <strong>"PlayTV"</strong> ou o reprodutor equivalente <strong>"Ibo Player Pro"</strong>.</p>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="portal-key" style="display: block; font-weight: 700; margin-bottom: 8px; color: var(--text-light);"><i class="fa-solid fa-key" style="color: var(--primary);"></i> Device Key (Senha)</label>
-                                    <input type="password" id="portal-key" placeholder="Ex: 123456" required maxlength="6" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); border-radius: 8px; color: var(--text-light);">
+                                <div class="install-step">
+                                    <div class="step-num">2</div>
+                                    <div class="step-text">
+                                        <h4>Instale & Abra</h4>
+                                        <p>Baixe o aplicativo. Ao abri-lo pela primeira vez, anote os códigos exclusivos de <strong>MAC Address</strong> e <strong>Device Key</strong> mostrados na tela.</p>
+                                    </div>
+                                </div>
+                                <div class="install-step">
+                                    <div class="step-num">3</div>
+                                    <div class="step-text">
+                                        <h4>Envie Suas Playlists</h4>
+                                        <p>Insira os códigos exibidos no nosso **Portal de Gerenciamento** abaixo para carregar sua lista de canais em tempo real.</p>
+                                    </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-glow btn-full" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; font-size: 1rem; border-radius: 8px; cursor: pointer; border: none; font-weight: 700; transition: all 0.3s;">
-                                <span>ENTRAR NO MEU PAINEL</span>
-                                <i class="fa-solid fa-right-to-bracket"></i>
-                            </button>
-                        </form>
-                        <div id="login-error-msg" class="portal-error-msg hidden" style="margin-top: 15px; color: #ef4444; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;">
-                            <i class="fa-solid fa-triangle-exclamation"></i> MAC Address ou Device Key incorretos. Caso ainda não tenha cadastro, fale com nosso suporte.
                         </div>
                     </div>
-
-                    <!-- Estado 2: Painel do Cliente (Logado) -->
-                    <div id="playlist-dashboard-state" class="portal-state hidden">
-                        <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 15px; margin-bottom: 20px;">
-                            <div class="client-info" style="display: flex; gap: 12px; flex-wrap: wrap;">
-                                <div class="info-pill" style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 20px; font-size: 0.85rem;"><i class="fa-solid fa-barcode" style="color: var(--primary);"></i> MAC: <span id="client-mac-display" class="highlight" style="font-weight: 700; color: var(--primary);"></span></div>
-                                <div class="info-pill" style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 20px; font-size: 0.85rem;"><i class="fa-solid fa-calendar-days" style="color: #22c55e;"></i> Expira: <span id="client-expire-display" style="font-weight: 700; color: #22c55e;"></span></div>
-                            </div>
-                            <button id="btn-portal-logout" class="btn btn-danger btn-sm" style="padding: 6px 12px; border-radius: 6px;"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
-                        </div>
-
-                        <div class="playlists-manager-grid" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px;">
-                            <!-- Lado Esquerdo: Listar Playlists -->
-                            <div class="playlists-list-box">
-                                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-list-ul" style="color: var(--primary);"></i> Minhas Listas Ativas</h3>
-                                <div id="playlists-container" class="playlists-container" style="display: flex; flex-direction: column; gap: 12px; min-height: 80px;">
-                                    <!-- Preenchido dinamicamente -->
+                    
+                    <!-- Guia LG -->
+                    <div class="tab-pane" id="tab-lg">
+                        <div class="install-guide-card glass-panel">
+                            <div class="install-steps">
+                                <div class="install-step">
+                                    <div class="step-num">1</div>
+                                    <div class="step-text">
+                                        <h4>Acesse a LG Content Store</h4>
+                                        <p>Abra a loja de aplicativos oficial da sua TV LG WebOS e busque pelo app <strong>"PlayTV"</strong>.</p>
+                                    </div>
+                                </div>
+                                <div class="install-step">
+                                    <div class="step-num">2</div>
+                                    <div class="step-text">
+                                        <h4>Instale e Anote os Códigos</h4>
+                                        <p>Abra o app baixado. Você verá no topo da tela o seu endereço MAC e senha do dispositivo (Device Key).</p>
+                                    </div>
+                                </div>
+                                <div class="install-step">
+                                    <div class="step-num">3</div>
+                                    <div class="step-text">
+                                        <h4>Sincronize Online</h4>
+                                        <p>Faça login com os códigos no nosso gerenciador de playlists abaixo e insira as suas URLs M3U.</p>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Guia Android -->
+                    <div class="tab-pane" id="tab-android">
+                        <div class="install-guide-card glass-panel">
+                            <div class="install-steps">
+                                <div class="install-step">
+                                    <div class="step-num">1</div>
+                                    <div class="step-text">
+                                        <h4>Baixe nosso APK</h4>
+                                        <p>Clique no botão <strong>Baixar APK</strong> na parte superior deste site ou digite o link direto de download no navegador do aparelho.</p>
+                                    </div>
+                                </div>
+                                <div class="install-step">
+                                    <div class="step-num">2</div>
+                                    <div class="step-text">
+                                        <h4>Instale no Aparelho Android</h4>
+                                        <p>Copie o APK para um Pen Drive, conecte no Box, utilize um gerenciador de arquivos interno e autorize a instalação.</p>
+                                    </div>
+                                </div>
+                                <div class="install-step">
+                                    <div class="step-num">3</div>
+                                    <div class="step-text">
+                                        <h4>Vincule as Listas no Portal</h4>
+                                        <p>Abra o PlayTV, faça o login no portal online abaixo e assista com estabilidade extrema em resolução 4K UHD.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Guia Firestick -->
+                    <div class="tab-pane" id="tab-firestick">
+                        <div class="install-guide-card glass-panel">
+                            <div class="install-steps">
+                                <div class="install-step">
+                                    <div class="step-num">1</div>
+                                    <div class="step-text">
+                                        <h4>Instale o Aplicativo Downloader</h4>
+                                        <p>Pesquise por <strong>"Downloader"</strong> na loja oficial do Amazon Firestick e instale-o no aparelho.</p>
+                                    </div>
+                                </div>
+                                <div class="install-step">
+                                    <div class="step-num">2</div>
+                                    <div class="step-text">
+                                        <h4>Insira a URL de Atalho</h4>
+                                        <p>Inicie o Downloader e digite o link direto do APK: <strong>https://shorturl.at/nAOUY</strong> para baixar o PlayTV.</p>
+                                    </div>
+                                </div>
+                                <div class="install-step">
+                                    <div class="step-num">3</div>
+                                    <div class="step-text">
+                                        <h4>Autorize e Conclua</h4>
+                                        <p>Nas configurações do Firestick, autorize aplicativos de fontes desconhecidas, clique em instalar, abra o app e sincronize.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                            <!-- Lado Direito: Adicionar/Editar Playlist -->
-                            <div class="playlist-form-box" style="background: rgba(0,0,0,0.15); border: 1px solid var(--border-glass); padding: 20px; border-radius: 12px;">
-                                <h3 id="playlist-form-title" style="font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-plus-circle" style="color: var(--primary);"></i> Adicionar Lista</h3>
-                                <form id="playlist-action-form">
-                                    <input type="hidden" id="edit-index" value="-1">
-                                    <div class="form-group" style="margin-bottom: 15px;">
-                                        <label for="playlist-name" style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; color: var(--text-light);">Nome da Lista</label>
-                                        <input type="text" id="playlist-name" placeholder="Ex: Canais Premium" required style="width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); border-radius: 6px; color: var(--text-light);">
+        <!-- Seção de Fluxo de Trabalho -->
+        <section class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Fluxo Simples</span>
+                    <h2 class="section-title">Configure em <span>4 Passos Fáceis</span></h2>
+                </div>
+                
+                <div class="workflow-grid">
+                    <div class="workflow-card glass-panel">
+                        <div class="workflow-number">01</div>
+                        <h3>Baixe o App</h3>
+                        <p>Instale o aplicativo oficial da PlayTV na sua TV ou dispositivo de streaming favorito.</p>
+                    </div>
+                    
+                    <div class="workflow-card glass-panel">
+                        <div class="workflow-number">02</div>
+                        <h3>Anote MAC & Key</h3>
+                        <p>Inicie o app na sua tela e anote os códigos exclusivos de MAC e Chave do aparelho.</p>
+                    </div>
+                    
+                    <div class="workflow-card glass-panel">
+                        <div class="workflow-number">03</div>
+                        <h3>Gerencie Listas</h3>
+                        <p>Entre no nosso portal online abaixo para adicionar ou editar suas listas de canais M3U.</p>
+                    </div>
+                    
+                    <div class="workflow-card glass-panel">
+                        <div class="workflow-number">04</div>
+                        <h3>Assista em 4K</h3>
+                        <p>Assista aos seus canais de preferência sem travamentos e com a melhor velocidade.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORTAL INTERATIVO DO CLIENTE (Playlists & Ativações) -->
+        <section id="gerenciar" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Portal do Cliente</span>
+                    <h2 class="section-title">Gerencie Seu <span>Dispositivo Online</span></h2>
+                    <p class="section-subtitle">Entre com os códigos exibidos na tela da sua TV para enviar novas listas ou verificar o status de ativação do seu teste gratuito.</p>
+                </div>
+                
+                <div class="portal-tabs">
+                    <button class="portal-tab-btn active" data-target="portal-playlists">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Gerenciar Playlists</span>
+                    </button>
+                    <button class="portal-tab-btn magenta-tab" data-target="portal-activate" id="ativar">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Ativação do Aparelho</span>
+                    </button>
+                </div>
+                
+                <div class="portal-container">
+                    
+                    <!-- ABA 1: Gerenciar Playlists -->
+                    <div class="portal-pane active" id="portal-playlists">
+                        <div class="portal-card glass-panel">
+                            
+                            <!-- Formulário de Login -->
+                            <div id="playlist-login-state" class="portal-state active">
+                                <form id="playlist-login-form" class="portal-form">
+                                    <div class="form-group">
+                                        <label for="p-mac">Endereço MAC da TV</label>
+                                        <input type="text" id="p-mac" class="form-input" placeholder="Ex: AA:BB:CC:11:22:33" required>
                                     </div>
-                                    <div class="form-group" style="margin-bottom: 15px;">
-                                        <label for="playlist-url" style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; color: var(--text-light);">URL M3U da Playlist</label>
-                                        <input type="url" id="playlist-url" placeholder="Ex: http://servidor.com/get.php..." required style="width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); border-radius: 6px; color: var(--text-light);">
+                                    <div class="form-group">
+                                        <label for="p-key">Chave Device Key</label>
+                                        <input type="password" id="p-key" class="form-input" placeholder="Ex: 123456" required>
                                     </div>
-                                    <div class="playlist-form-buttons" style="display: flex; gap: 10px; margin-top: 15px;">
-                                        <button type="submit" class="btn btn-primary" id="btn-save-playlist" style="flex: 1; padding: 10px; border-radius: 6px; font-weight: 700; border: none; cursor: pointer;">Salvar Lista</button>
-                                        <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit" style="padding: 10px; border-radius: 6px; font-weight: 700; border: none; cursor: pointer;">Cancelar</button>
-                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-lg btn-full">
+                                        <span>Entrar & Gerenciar</span>
+                                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                    </button>
                                 </form>
                             </div>
+                            
+                            <!-- Dashboard de Playlists pós login -->
+                            <div id="playlist-dashboard-state" class="portal-state hidden">
+                                <div class="dashboard-title-bar">
+                                    <h3>Painel de Listas Sincronizadas</h3>
+                                    <span class="mac-badge" id="logged-mac-badge">MAC: --:--:--:--:--:--</span>
+                                </div>
+                                
+                                <div class="dashboard-grid">
+                                    <!-- Listagem de Playlists -->
+                                    <div class="playlists-box">
+                                        <div id="playlists-container">
+                                            <!-- Carregado via JS -->
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Formulário da Playlist -->
+                                    <div class="playlist-form-box" style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); padding: 24px; border-radius: 12px;">
+                                        <h4 id="playlist-form-title" style="font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--text-light);">
+                                            <i class="fa-solid fa-plus-circle" style="color: var(--cyan);"></i> <span>Adicionar Lista</span>
+                                        </h4>
+                                        
+                                        <form id="playlist-action-form">
+                                            <input type="hidden" id="edit-index" value="-1">
+                                            <div class="form-group" style="margin-bottom: 16px;">
+                                                <label for="playlist-name">Nome da Playlist</label>
+                                                <input type="text" id="playlist-name" class="form-input" placeholder="Ex: Meus Canais" required>
+                                            </div>
+                                            <div class="form-group" style="margin-bottom: 20px;">
+                                                <label for="playlist-url">URL M3U da Playlist</label>
+                                                <input type="url" id="playlist-url" class="form-input" placeholder="Ex: http://servidor.com/get.php..." required>
+                                            </div>
+                                            
+                                            <div style="display: flex; gap: 10px;">
+                                                <button type="submit" class="btn btn-primary" id="btn-save-playlist" style="flex: 1;">Salvar Lista</button>
+                                                <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit">Cancelar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-secondary btn-sm" id="btn-playlist-logout" style="margin-top: 24px;">
+                                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Sair do Painel
+                                </button>
+                            </div>
                         </div>
+                    </div>
+                    
+                    <!-- ABA 2: Ativação do Aparelho -->
+                    <div class="portal-pane" id="portal-activate">
+                        <div class="portal-card glass-panel">
+                            
+                            <!-- Formulário de Checagem -->
+                            <div id="activation-check-state" class="portal-state active">
+                                <form id="activation-check-form" class="portal-form">
+                                    <div class="form-group">
+                                        <label for="a-mac">Endereço MAC da TV</label>
+                                        <input type="text" id="a-mac" class="form-input" placeholder="Ex: AA:BB:CC:11:22:33" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="a-key">Chave Device Key</label>
+                                        <input type="password" id="a-key" class="form-input" placeholder="Ex: 123456" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-magenta btn-lg btn-full">
+                                        <span>Verificar Status de Ativação</span>
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            
+                            <!-- Dashboard de Status de Licença -->
+                            <div id="activation-dashboard-state" class="portal-state hidden">
+                                <div class="status-card">
+                                    <h3>Informações de Ativação</h3>
+                                    <p style="color: var(--text-muted); margin-bottom: 20px;" id="status-mac-label">MAC: --:--:--:--:--:--</p>
+                                    
+                                    <div class="status-badge trial" id="device-status-badge">
+                                        <i class="fa-solid fa-gift"></i>
+                                        <span>TESTE DE 7 DIAS GRÁTIS ATIVO</span>
+                                    </div>
+                                    
+                                    <div class="status-grid">
+                                        <div class="status-item">
+                                            <span class="label">Chave de Acesso</span>
+                                            <span class="val" id="device-info-key">------</span>
+                                        </div>
+                                        <div class="status-item">
+                                            <span class="label">Vencimento da Licença</span>
+                                            <span class="val" id="device-info-expiry">-----</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 24px;">
+                                        Para estender sua assinatura ou obter uma licença permanente para a TV, envie uma mensagem para o nosso suporte técnico.
+                                    </p>
+                                    
+                                    <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+                                        <a href="#" target="_blank" class="btn btn-whatsapp btn-lg whatsapp-trigger" id="btn-activate-whatsapp">
+                                            <i class="fa-brands fa-whatsapp"></i>
+                                            <span>Ativar via WhatsApp</span>
+                                        </a>
+                                        <button class="btn btn-secondary btn-lg" id="btn-activation-logout">
+                                            <i class="fa-solid fa-chevron-left"></i> Voltar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Dúvidas (FAQ) -->
+        <section id="faq" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Perguntas Frequentes</span>
+                    <h2 class="section-title">Central de <span>Ajuda & Suporte</span></h2>
+                </div>
+                
+                <div class="faq-grid">
+                    <div class="faq-item glass-panel">
+                        <button class="faq-question">
+                            <span>O PlayTV contém listas ou canais de streaming?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Não. O PlayTV é estritamente um aplicativo reprodutor de mídia (IPTV Player). Nós não fornecemos, vendemos, hospedamos ou transmitimos nenhum canal, lista ou assinatura. Cada usuário deve enviar sua própria lista de canais legalmente adquirida para poder assistir.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item glass-panel">
+                        <button class="faq-question">
+                            <span>Quais aparelhos são compatíveis com o PlayTV?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>O aplicativo é compatível com Smart TVs Samsung (Tizen OS), Smart TVs LG (WebOS), aparelhos Android TV, TV Boxes, TV Sticks (TCL, Philips, Xiaomi) e o Amazon Firestick, além de celulares Android.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item glass-panel">
+                        <button class="faq-question">
+                            <span>De quanto tempo é o teste gratuito do aplicativo?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Fornecemos um período de teste gratuito de 7 dias a partir do dia em que você abre o aplicativo pela primeira vez na sua TV, permitindo que você experimente a qualidade das funções e do motor de carregamento sem compromissos.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item glass-panel">
+                        <button class="faq-question">
+                            <span>O reprodutor suporta resoluções em alta definição (4K)?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Sim. O PlayTV suporta todas as resoluções de vídeo, incluindo HD, Full HD e 4K Ultra HD. Lembre-se que a exibição em 4K depende de sua lista de canais possuir links nessa resolução e sua internet ser rápida o suficiente.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Contato -->
+        <section id="contato" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Fale Conosco</span>
+                    <h2 class="section-title">Contato <span>Com o Suporte</span></h2>
+                    <p class="section-subtitle">Dúvidas ou problemas técnicos? Envie sua mensagem e responderemos prontamente.</p>
+                </div>
+                
+                <div class="contact-container">
+                    <div class="contact-card glass-panel">
+                        <form id="contact-form" class="portal-form">
+                            <div class="form-group">
+                                <label for="c-name">Nome Completo</label>
+                                <input type="text" id="c-name" class="form-input" placeholder="Seu Nome" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="c-email">Endereço de E-mail</label>
+                                <input type="email" id="c-email" class="form-input" placeholder="seu-email@dominio.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="c-message">Sua Mensagem</label>
+                                <textarea id="c-message" class="form-input" placeholder="Descreva sua dúvida detalhadamente aqui..." style="min-height: 120px; font-family: inherit; resize: vertical;" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg btn-full">
+                                <span>Enviar Mensagem</span>
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -749,91 +637,55 @@
 
     </main>
 
-    <!-- Footer -->
+    <!-- Rodapé -->
     <footer class="main-footer">
         <div class="container footer-container">
-            <div class="footer-brand">
-                <a href="#" class="logo">
-                    <span class="logo-icon"><i class="fa-solid fa-tv"></i></span>
-                    <span class="logo-text">IBO<span class="highlight">PRIME</span></span>
-                </a>
-                <p>Especialistas em ativação de canais premium no IBO Player. O melhor entretenimento sem quedas, direto na sua Smart TV.</p>
-                <div class="footer-socials">
-                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <img src="app_icon.png" alt="Logo PlayTV" class="logo-img">
+                        <span class="logo-text">Play<span>TV</span></span>
+                    </a>
+                    <p>O PlayTV é um player de mídia IPTV premium e independente. Fornecemos painéis de sincronização seguros e em tempo real acoplados ao banco de dados na nuvem.</p>
+                    <div class="footer-socials">
+                        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="#inicio">Início</a></li>
+                        <li><a href="#como-usar">Como Usar</a></li>
+                        <li><a href="#gerenciar">Gerenciar Listas</a></li>
+                        <li><a href="#ativar">Ativação</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Segurança & Suporte</h4>
+                    <span class="security-badge"><i class="fa-solid fa-lock"></i> Criptografia SSL Segura</span>
+                    <span class="security-badge"><i class="fa-solid fa-circle-check"></i> Sincronização Firebase</span>
+                    <span class="security-badge"><i class="fa-solid fa-shield"></i> Integração Verificada</span>
                 </div>
             </div>
             
-            <div class="footer-links-group">
-                <div class="footer-col">
-                    <h4>Navegação</h4>
-                    <a href="#inicio">Início</a>
-                    <a href="#como-baixar">Como Baixar</a>
-                    <a href="#ativacao">Manual Ativação</a>
-                    <a href="#planos">Preços & Planos</a>
-                </div>
-                
-                <div class="footer-col">
-                    <h4>Suporte</h4>
-                    <a href="#faq">Perguntas Frequentes</a>
-                    <a href="#ativacao">Enviar Códigos IBO</a>
-                    <a href="#" class="whatsapp-trigger">Atendimento WhatsApp</a>
-                </div>
-                
-                <div class="footer-col">
-                    <h4>Segurança</h4>
-                    <span class="security-badge"><i class="fa-solid fa-lock"></i> Canal Criptografado SSL</span>
-                    <span class="security-badge"><i class="fa-solid fa-circle-check"></i> Ativação Oficial IBO</span>
-                </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 PlayTV. Todos os direitos reservados. PlayTV é um reprodutor de mídia independente de terceiros. Nós não fornecemos, revendemos ou distribuímos assinaturas de canais.</p>
             </div>
-        </div>
-        
-        <div class="footer-bottom text-center">
-            <p>&copy; 2026 IBO Prime. Todos os direitos reservados. IBO Player é um player de mídia de terceiros. Somos provedores independentes de ativação técnica.</p>
         </div>
     </footer>
 
-    <!-- WhatsApp Floating Contact Drawer -->
-    <div class="whatsapp-widget-container">
-        <div class="whatsapp-chat-box glass-panel">
-            <div class="chat-header">
-                <div class="agent-avatar">
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop" alt="Atendente" class="avatar-img">
-                    <span class="online-indicator"></span>
-                </div>
-                <div class="agent-info">
-                    <h4>Clara - Ativação IBO</h4>
-                    <span>Online agora</span>
-                </div>
-                <button class="chat-close-btn"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="chat-body">
-                <div class="chat-message received">
-                    <p>Olá! Tudo bem? 🍿</p>
-                </div>
-                <div class="chat-message received">
-                    <p>Baixou o IBO Player na sua TV e quer ativar seus 7 dias grátis? Envie a foto da tela com seus códigos aqui e eu ativo seu teste agora!</p>
-                </div>
-                <div class="typing-indicator">
-                    <span></span><span></span><span></span>
-                </div>
-            </div>
-            <div class="chat-footer">
-                <a href="#" target="_blank" class="btn btn-whatsapp btn-full text-center" id="btn-chat-whatsapp">
-                    <i class="fa-brands fa-whatsapp"></i>
-                    <span>Conversar no WhatsApp</span>
-                </a>
-            </div>
-        </div>
-        
-        <button class="whatsapp-floating-btn" aria-label="Abrir suporte WhatsApp">
-            <span class="notification-badge">1</span>
+    <!-- Botão Flutuante do WhatsApp -->
+    <div class="whatsapp-widget-container" style="position: fixed; bottom: 30px; right: 30px; z-index: 1000;">
+        <button class="whatsapp-floating-btn" aria-label="Abrir suporte WhatsApp" style="height: 60px; width: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--whatsapp) 0%, #15803d 100%); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: var(--text-light); border: none; box-shadow: 0 10px 25px var(--whatsapp-glow); cursor: pointer; transition: var(--transition-smooth);">
             <i class="fa-brands fa-whatsapp"></i>
         </button>
     </div>
 
-    <!-- Firebase SDK (compat mode for simplicity in vanilla HTML) -->
+    <!-- SDK Firebase (compat mode para simplicidade no HTML estático) -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script>
@@ -849,19 +701,18 @@
         const db = firebase.firestore();
     </script>
 
-    <!-- Custom Script -->
+    <!-- Script Customizado -->
     <script src="app.js"></script>
     
-    <!-- Register Service Worker for PWA compatibility -->
+    <!-- Registro do Service Worker para suporte PWA -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(() => console.log('Service Worker registered successfully'))
-                    .catch((err) => console.log('Service Worker registration failed:', err));
+                    .then(() => console.log('Service Worker registrado com sucesso'))
+                    .catch((err) => console.log('Falha ao registrar Service Worker:', err));
             });
         }
     </script>
 </body>
 </html>
-
