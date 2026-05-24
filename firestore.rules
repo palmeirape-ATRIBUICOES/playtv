@@ -2,8 +2,8 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow read/write to the campaigns collection (single user app)
-    match /campaigns/{document=**} {
+    // Allow read/write to all collections (campaigns and playlists) for CRM sync and client portal
+    match /{document=**} {
       allow read, write: if true;
     }
   }

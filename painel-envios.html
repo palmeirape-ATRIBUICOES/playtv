@@ -674,7 +674,10 @@
                 </button>
             </div>
 
-            <div>
+            <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-sm hidden" id="btn-remove-duplicates" onclick="removeDuplicateContacts()" style="background: rgba(255, 159, 10, 0.1); border: 1px solid rgba(255, 159, 10, 0.3); color: var(--primary);">
+                    <i class="fa-solid fa-clone"></i> Remover Repetidos
+                </button>
                 <button class="btn btn-danger hidden" id="btn-clear-all" onclick="resetCampaign()">
                     <i class="fa-solid fa-trash"></i> Limpar Tudo
                 </button>
@@ -722,6 +725,20 @@
                     <div class="form-group msg-editor-tab" id="editor-tab-1">
                         <label>Mensagem 1 - Abordagem Inicial (Pendente ➡️ Enviado):</label>
                         <textarea id="template-text-1" oninput="saveTemplates()"></textarea>
+                        
+                        <!-- Toggle to include hero banner photo link -->
+                        <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px; background: rgba(255, 159, 10, 0.05); padding: 8px 12px; border: 1px dashed rgba(255, 159, 10, 0.2); border-radius: 8px;">
+                            <input type="checkbox" id="include-hero-link" style="width: auto; cursor: pointer;" onchange="toggleHeroLink(this.checked)">
+                            <label for="include-hero-link" style="margin-bottom: 0; font-size: 0.8rem; font-weight: 700; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <i class="fa-solid fa-image"></i> Anexar Foto de Apresentação/Banner da Campanha
+                            </label>
+                        </div>
+                        
+                        <!-- Preview Box -->
+                        <div id="hero-preview-box" class="hidden" style="margin-top: 12px; border: 1px solid var(--border-glass); padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.2); text-align: center;">
+                            <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 8px; text-align: left;"><i class="fa-solid fa-eye"></i> Banner que o cliente receberá no WhatsApp:</span>
+                            <img src="hero_banner.jpg" style="width: 100%; max-width: 240px; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); border: 1px solid var(--border-glass);">
+                        </div>
                     </div>
 
                     <!-- Message Tab Content 2 -->
@@ -888,6 +905,7 @@
                 5: "Olá {Nome}! Passando para lembrar que o seu acesso premium de IPTV no IBO Player vence hoje ({Data}).\n\nPara garantir que sua Smart TV não sofra nenhuma interrupção de sinal, envie o Pix e reative agora! Caso precise de suporte ou queira trocar de servidor, estamos aqui. 🚀"
             },
             includeMockLink: true,
+            includeHeroLink: true,
             currentBatch: 0,
             filter: 'all' // all, pending, sent, replied, client
         };
@@ -920,6 +938,9 @@
                 }
                 if (campaignData.includeMockLink === undefined) {
                     campaignData.includeMockLink = true;
+                }
+                if (campaignData.includeHeroLink === undefined) {
+                    campaignData.includeHeroLink = true;
                 }
                 
                 if (!campaignData.contacts || campaignData.contacts.length === 0) {
@@ -1000,6 +1021,8 @@
         function processInputText(rawText) {
             let tempContacts = [];
             let skippedCount = 0;
+            let duplicateCount = 0;
+            const seenPhones = new Set();
 
             const isStandardCSV = rawText.includes('First Name') || rawText.includes('Given Name') || rawText.includes('Phone 1');
 
@@ -1045,7 +1068,12 @@
                     if (phoneFound && fullName.toLowerCase().includes('iptv')) {
                         const clean = cleanContactData(fullName, phoneFound);
                         if (clean) {
-                            tempContacts.push(clean);
+                            if (seenPhones.has(clean.phone)) {
+                                duplicateCount++;
+                            } else {
+                                seenPhones.add(clean.phone);
+                                tempContacts.push(clean);
+                            }
                         } else {
                             skippedCount++;
                         }
@@ -1077,7 +1105,12 @@
                         if (contactPhone) {
                             const clean = cleanContactData(contactName, contactPhone);
                             if (clean) {
-                                tempContacts.push(clean);
+                                if (seenPhones.has(clean.phone)) {
+                                    duplicateCount++;
+                                } else {
+                                    seenPhones.add(clean.phone);
+                                    tempContacts.push(clean);
+                                }
                             } else {
                                 skippedCount++;
                             }
@@ -1096,10 +1129,17 @@
 
             campaignData.contacts = tempContacts;
             campaignData.currentBatch = 0;
+            localStorage.removeItem('iptv_firebase_migrated'); // Clear migration flag for the new CSV list
             saveToStorage();
             initCampaignUI();
             
-            alert(`Sucesso! Importamos e limpamos ${tempContacts.length} contatos IPTV!\n(Registros ignorados ou sem número: ${skippedCount})`);
+            // Automatically push imported contacts to Firestore to ensure instant PWA sync!
+            if (_firestoreReady && db) {
+                migrateAllContactsToFirestore();
+            }
+            
+            alert(`Sucesso! Importamos e limpamos ${tempContacts.length} contatos IPTV!\n` +
+                  `(Ignorados ou sem número: ${skippedCount} | Duplicados excluídos: ${duplicateCount})`);
         }
 
         // Clean raw contact name formats dynamically (glued IPTV tags, numbers, etc.)
@@ -1135,6 +1175,8 @@
             document.getElementById('panel-import').classList.add('hidden');
             document.getElementById('campaign-container').classList.remove('hidden');
             document.getElementById('btn-clear-all').classList.remove('hidden');
+            const btnDupes = document.getElementById('btn-remove-duplicates');
+            if (btnDupes) btnDupes.classList.remove('hidden');
             
             // Populating current textareas from data object
             document.getElementById('template-text-1').value = campaignData.templates[1] || '';
@@ -1150,8 +1192,20 @@
                 toggleTvMockLink(!!campaignData.includeMockLink, false);
             }
             
+            // Include hero link checkbox state
+            const heroCheckbox = document.getElementById('include-hero-link');
+            if (heroCheckbox) {
+                heroCheckbox.checked = !!campaignData.includeHeroLink;
+                toggleHeroLink(!!campaignData.includeHeroLink, false);
+            }
+            
             updateStats();
             renderBatch();
+
+            // Safe initialization: Start Firebase sync ONLY after local data is loaded
+            if (typeof initFirebaseSync === 'function') {
+                initFirebaseSync();
+            }
         }
 
         function toggleTvMockLink(isChecked, isUserTriggered = true) {
@@ -1163,6 +1217,19 @@
             }
             if (isUserTriggered) {
                 saveToStorage();
+            }
+        }
+
+        function toggleHeroLink(isChecked, isUserTriggered = true) {
+            campaignData.includeHeroLink = isChecked;
+            const previewBox = document.getElementById('hero-preview-box');
+            if (previewBox) {
+                if (isChecked) previewBox.classList.remove('hidden');
+                else previewBox.classList.add('hidden');
+            }
+            if (isUserTriggered) {
+                saveToStorage();
+                pushSettingsToFirestore();
             }
         }
 
@@ -1352,7 +1419,12 @@
                     else if (item.status === 'client') { badgeClass = 'badge-client'; badgeText = 'Cliente 👑'; }
  
                     const waPhone = item.phone.replace(/\D/g, '');
-                    const waUrl1 = `https://api.whatsapp.com/send?phone=${waPhone}&text=${encodeURIComponent(campaignData.templates[1].replace(/{Nome}/g, clientFirstName))}`;
+                    
+                    let msgText1 = campaignData.templates[1].replace(/{Nome}/g, clientFirstName);
+                    if (campaignData.includeHeroLink) {
+                        msgText1 += "\n\n📺 Veja nossa apresentação:\nhttps://iptv-campanha.vercel.app/hero_banner.jpg";
+                    }
+                    const waUrl1 = `https://api.whatsapp.com/send?phone=${waPhone}&text=${encodeURIComponent(msgText1)}`;
                     
                     // Attach TV screen photo mockup link conditionally to template 2
                     let msgText2 = campaignData.templates[2].replace(/{Nome}/g, clientFirstName);
@@ -1488,9 +1560,56 @@
         function resetCampaign() {
             if (confirm("Tem certeza que deseja limpar todo o progresso atual e recarregar a lista de 4.590 contatos do servidor?")) {
                 localStorage.removeItem('iptv_mass_campaign_seq');
+                localStorage.removeItem('iptv_firebase_migrated'); // Clear migration flag to trigger database refresh
                 campaignData.contacts = [];
                 campaignData.currentBatch = 0;
                 fetchContactsFromServer();
+            }
+        }
+
+        function removeDuplicateContacts() {
+            const initialCount = campaignData.contacts.length;
+            if (initialCount === 0) {
+                alert("Nenhum contato na lista para filtrar.");
+                return;
+            }
+
+            const uniqueContacts = [];
+            const seenPhones = new Set();
+            let duplicateCount = 0;
+
+            // We iterate in order to preserve the first occurrence of each phone number
+            for (const contact of campaignData.contacts) {
+                const cleanPhone = contact.phone.replace(/\D/g, '');
+                if (seenPhones.has(cleanPhone)) {
+                    duplicateCount++;
+                } else {
+                    seenPhones.add(cleanPhone);
+                    uniqueContacts.push(contact);
+                }
+            }
+
+            if (duplicateCount === 0) {
+                alert("Nenhum número de telefone repetido foi encontrado na lista!");
+                return;
+            }
+
+            if (confirm(`Foram encontrados ${duplicateCount} contatos repetidos. Deseja excluí-los e manter apenas o primeiro de cada?`)) {
+                campaignData.contacts = uniqueContacts;
+                campaignData.currentBatch = 0;
+                
+                // Save to localStorage
+                saveToStorage();
+                
+                // Firestore merges duplicate doc keys anyway, so we just update settings to sync
+                if (_firestoreReady && db) {
+                    pushSettingsToFirestore();
+                }
+
+                updateStats();
+                renderBatch();
+                
+                alert(`Sucesso! ${duplicateCount} contatos repetidos foram excluídos. Agora você tem ${uniqueContacts.length} contatos únicos.`);
             }
         }
 
@@ -1583,6 +1702,7 @@
                 await db.collection('campaigns').doc('main').set({
                     templates: campaignData.templates,
                     includeMockLink: campaignData.includeMockLink,
+                    includeHeroLink: campaignData.includeHeroLink,
                     lastUpdated: Date.now()
                 }, { merge: true });
             } catch (err) {
@@ -1593,10 +1713,39 @@
         // Override saveToStorage to also push to Firestore
         const _originalSaveTemplates = typeof saveTemplates === 'function' ? saveTemplates : null;
 
+        // Helper to clear existing contacts from Firestore to prevent mixing old lists
+        async function clearFirestoreContactsCollection() {
+            if (!_firestoreReady || !db) return;
+            try {
+                const snapshot = await db.collection('campaigns').doc('main').collection('contacts').get();
+                const BATCH_LIMIT = 450;
+                let batch = db.batch();
+                let count = 0;
+
+                for (const doc of snapshot.docs) {
+                    batch.delete(doc.ref);
+                    count++;
+                    if (count % BATCH_LIMIT === 0) {
+                        await batch.commit();
+                        batch = db.batch();
+                    }
+                }
+                if (count % BATCH_LIMIT !== 0) {
+                    await batch.commit();
+                }
+                console.log(`Deleted ${count} old contacts from Firestore.`);
+            } catch (err) {
+                console.error('Error clearing Firestore contacts:', err);
+            }
+        }
+
         // Full initial upload of all contacts to Firestore
         async function migrateAllContactsToFirestore() {
             if (!_firestoreReady || !db) return;
             updateSyncStatus('🟡 Migrando dados...');
+
+            // First, clear old contacts to prevent mixing lists
+            await clearFirestoreContactsCollection();
 
             const contacts = campaignData.contacts;
             const BATCH_LIMIT = 450; // Firestore max 500 per batch, leave margin
@@ -1656,6 +1805,16 @@
                     if (data.includeMockLink !== undefined) {
                         campaignData.includeMockLink = data.includeMockLink;
                     }
+                    if (data.includeHeroLink !== undefined) {
+                        campaignData.includeHeroLink = data.includeHeroLink;
+                        const heroCheckbox = document.getElementById('include-hero-link');
+                        if (heroCheckbox) heroCheckbox.checked = !!data.includeHeroLink;
+                        const previewBox = document.getElementById('hero-preview-box');
+                        if (previewBox) {
+                            if (data.includeHeroLink) previewBox.classList.remove('hidden');
+                            else previewBox.classList.add('hidden');
+                        }
+                    }
                 }
             });
 
@@ -1667,7 +1826,7 @@
                     let hasChanges = false;
 
                     // Build a map of local contacts by phone
-                    const localMap = {};
+                    let localMap = {};
                     campaignData.contacts.forEach((c, idx) => {
                         const key = c.phone.replace(/\D/g, '');
                         localMap[key] = idx;
@@ -1707,6 +1866,23 @@
                                     expiration: data.expiration || ''
                                 });
                                 hasChanges = true;
+                                
+                                // Update localMap with the newly added contact
+                                localMap[phoneKey] = campaignData.contacts.length - 1;
+                            }
+                        } else if (change.type === 'removed') {
+                            const localIdx = localMap[phoneKey];
+                            if (localIdx !== undefined) {
+                                // Remove local contact
+                                campaignData.contacts.splice(localIdx, 1);
+                                hasChanges = true;
+                                
+                                // Rebuild localMap because indices shifted!
+                                localMap = {};
+                                campaignData.contacts.forEach((c, idx) => {
+                                    const key = c.phone.replace(/\D/g, '');
+                                    localMap[key] = idx;
+                                });
                             }
                         }
                     });
@@ -1788,7 +1964,7 @@
 
         async function forceResync() {
             if (!_firestoreReady) return alert('Firebase ainda não está conectado. Aguarde.');
-            if (confirm('Isso vai reenviar todos os seus 4.590 contatos para o Firebase. Deseja continuar?')) {
+            if (confirm(`Isso vai reenviar todos os seus ${campaignData.contacts.length} contatos para o Firebase. Deseja continuar?`)) {
                 localStorage.removeItem('iptv_firebase_migrated');
                 await migrateAllContactsToFirestore();
                 alert('Reenvio completo! Todos os dados estão sincronizados.');
@@ -1809,7 +1985,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <script>
-        // Initialize Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDFtMnxV_eJF7bDAJsWsz0qG6FvmkIlUXM",
             authDomain: "iptv-crm-sync.firebaseapp.com",
@@ -1819,26 +1994,33 @@
             appId: "1:1056721293199:web:5096c81d11ff27be5b05fa"
         };
 
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.firestore();
+        let _firebaseInitialized = false;
 
-        // Enable offline persistence for PWA
-        db.enablePersistence({ synchronizeTabs: true })
-            .then(() => console.log('Firestore offline persistence enabled'))
-            .catch((err) => console.log('Persistence error (may already be enabled):', err.code));
+        function initFirebaseSync() {
+            if (_firebaseInitialized) return;
+            _firebaseInitialized = true;
 
-        _firestoreReady = true;
-        updateSyncStatus('🟢 Conectado');
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
 
-        // Check if initial migration is needed
-        const isMigrated = localStorage.getItem('iptv_firebase_migrated');
-        if (!isMigrated && campaignData.contacts.length > 0) {
-            // First time: upload all local contacts to Firestore
-            migrateAllContactsToFirestore();
+            // Enable offline persistence for PWA
+            db.enablePersistence({ synchronizeTabs: true })
+                .then(() => console.log('Firestore offline persistence enabled'))
+                .catch((err) => console.log('Persistence error (may already be enabled):', err.code));
+
+            _firestoreReady = true;
+            updateSyncStatus('🟢 Conectado');
+
+            // Check if initial migration is needed
+            const isMigrated = localStorage.getItem('iptv_firebase_migrated');
+            if (!isMigrated && campaignData.contacts.length > 0) {
+                // First time: upload all local contacts to Firestore
+                migrateAllContactsToFirestore();
+            }
+
+            // Start real-time listener immediately
+            startRealtimeListener();
         }
-
-        // Start real-time listener immediately
-        startRealtimeListener();
     </script>
 
     <!-- Cloud Sync Config Modal (simplified for Firebase) -->
@@ -1872,3 +2054,4 @@
     </div>
 </body>
 </html>
+

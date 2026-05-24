@@ -1,4 +1,4 @@
-/* -------------------------------------------------------------
+﻿/* -------------------------------------------------------------
    IBO PRIME - ADVANCED INTERACTIVE LOGIC
    Fully optimized for IBO Player screen upload & easy activations.
 ------------------------------------------------------------- */
@@ -290,14 +290,275 @@ document.addEventListener('DOMContentLoaded', () => {
         
     }, 2800);
 
-});
 
-// Bounce attention CSS keyframe helper injected programmatically
-const styleSheet = document.createElement("style");
-styleSheet.textContent = `
-    @keyframes bounce-attention {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-12px); }
+
+    // --- 9. CLIENT PORTAL PLAYLIST MANAGER LOGIC ---
+    const playlistLoginForm = document.getElementById("playlist-login-form");
+    const portalMacInput = document.getElementById("portal-mac");
+    const portalKeyInput = document.getElementById("portal-key");
+    const loginErrorMsg = document.getElementById("login-error-msg");
+    
+    const loginState = document.getElementById("playlist-login-state");
+    const dashboardState = document.getElementById("playlist-dashboard-state");
+    
+    const clientMacDisplay = document.getElementById("client-mac-display");
+    const clientExpireDisplay = document.getElementById("client-expire-display");
+    const playlistsContainer = document.getElementById("playlists-container");
+    
+    const playlistActionForm = document.getElementById("playlist-action-form");
+    const playlistNameInput = document.getElementById("playlist-name");
+    const playlistUrlInput = document.getElementById("playlist-url");
+    const editIndexInput = document.getElementById("edit-index");
+    const btnSavePlaylist = document.getElementById("btn-save-playlist");
+    const btnCancelEdit = document.getElementById("btn-cancel-edit");
+    const btnPortalLogout = document.getElementById("btn-portal-logout");
+    
+    let activeClientMac = null;
+    let activeClientKey = null;
+    let currentPlaylists = [];
+    
+    // Auto-format MAC Address input in client portal
+    if (portalMacInput) {
+        portalMacInput.addEventListener("input", (e) => {
+            let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+            let formatted = "";
+            for (let i = 0; i < value.length && i < 12; i++) {
+                if (i > 0 && i % 2 === 0) formatted += ":";
+                formatted += value[i];
+            }
+            e.target.value = formatted;
+        });
     }
-`;
-document.head.appendChild(styleSheet);
+    
+    // Check if session already exists
+    function checkActiveSession() {
+        const savedMac = localStorage.getItem("iptv_client_mac");
+        const savedKey = localStorage.getItem("iptv_client_key");
+        if (savedMac && savedKey && portalMacInput && portalKeyInput) {
+            portalMacInput.value = savedMac;
+            portalKeyInput.value = savedKey;
+            loginClient(savedMac, savedKey, true);
+        }
+    }
+    
+    // Handle Login Submit
+    if (playlistLoginForm) {
+        playlistLoginForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const mac = portalMacInput.value.trim().toLowerCase();
+            const key = portalKeyInput.value.trim();
+            loginClient(mac, key, false);
+        });
+    }
+    
+    async function loginClient(mac, key, isAutoLogin) {
+        if (!loginErrorMsg) return;
+        loginErrorMsg.classList.add("hidden");
+        const formattedMacDoc = mac.replace(/:/g, "-");
+        
+        try {
+            // 1. Try fetching from `/playlists/{mac}`
+            let docRef = db.collection("playlists").doc(formattedMacDoc);
+            let docSnap = await docRef.get();
+            
+            let playlistData = null;
+            
+            if (docSnap.exists) {
+                const data = docSnap.data();
+                if (data.device_key === key) {
+                    playlistData = data;
+                }
+            } else {
+                // 2. If not in playlists, try querying contacts collection in CRM
+                const contactsSnap = await db.collection("campaigns").doc("main").collection("contacts")
+                    .where("mac", "==", mac.toUpperCase())
+                    .get();
+                    
+                if (!contactsSnap.empty) {
+                    const contactDoc = contactsSnap.docs[0];
+                    const contactData = contactDoc.data();
+                    
+                    // Verify key (crm password field is pass)
+                    if (contactData.pass === key) {
+                        // Onboard this client into the /playlists collection
+                        const newPlaylistDoc = {
+                            mac_address: mac.toUpperCase(),
+                            device_key: key,
+                            expire_date: contactData.expiration || "2028-12-31",
+                            is_trial: 0,
+                            playlists: contactData.server && contactData.server !== "Nenhum" ? [
+                                { name: "Minha Lista Principal", url: contactData.server }
+                            ] : []
+                        };
+                        await docRef.set(newPlaylistDoc);
+                        playlistData = newPlaylistDoc;
+                    }
+                }
+            }
+            
+            if (playlistData) {
+                // Save session for multi-page persistence and auto-load
+                localStorage.setItem("iptv_client_mac", mac);
+                localStorage.setItem("iptv_client_key", key);
+                
+                activeClientMac = mac;
+                activeClientKey = key;
+                currentPlaylists = playlistData.playlists || [];
+                
+                // Show dashboard state
+                if (clientMacDisplay) clientMacDisplay.textContent = playlistData.mac_address;
+                if (clientExpireDisplay) clientExpireDisplay.textContent = playlistData.expire_date;
+                
+                if (loginState) loginState.classList.add("hidden");
+                if (dashboardState) dashboardState.classList.remove("hidden");
+                
+                renderPlaylists();
+            } else {
+                if (!isAutoLogin) {
+                    loginErrorMsg.classList.remove("hidden");
+                } else {
+                    // Stale login session, clean up
+                    logoutClient();
+                }
+            }
+        } catch (err) {
+            console.error("Login error:", err);
+            if (!isAutoLogin) loginErrorMsg.classList.remove("hidden");
+        }
+    }
+    
+    function renderPlaylists() {
+        if (!playlistsContainer) return;
+        playlistsContainer.innerHTML = "";
+        if (currentPlaylists.length === 0) {
+            playlistsContainer.innerHTML = `
+                <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.9rem; background: rgba(255,255,255,0.02); border: 1px dashed var(--border-glass); border-radius: 8px;">
+                    <i class="fa-solid fa-folder-open" style="font-size: 1.5rem; margin-bottom: 8px; color: var(--primary);"></i><br>
+                    Nenhuma playlist cadastrada. Adicione uma no formulÃ¡rio ao lado!
+                </div>
+            `;
+            return;
+        }
+        
+        currentPlaylists.forEach((pl, idx) => {
+            const item = document.createElement("div");
+            item.className = "playlist-item glass-panel";
+            item.style.display = "flex";
+            item.style.justifyContent = "space-between";
+            item.style.alignItems = "center";
+            item.style.padding = "12px 16px";
+            item.style.borderRadius = "8px";
+            item.style.background = "rgba(255,255,255,0.03)";
+            item.style.border = "1px solid var(--border-glass)";
+            
+            item.innerHTML = `
+                <div style="flex: 1; min-width: 0; padding-right: 15px;">
+                    <div style="font-weight: 700; color: var(--text-light); font-size: 0.95rem; margin-bottom: 3px;">${pl.name}</div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${pl.url}</div>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-sm btn-edit" data-index="${idx}" style="background: rgba(10, 132, 255, 0.15); color: #0a84ff; border: 1px solid rgba(10, 132, 255, 0.3); padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; cursor: pointer;"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn btn-sm btn-delete" data-index="${idx}" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; cursor: pointer;"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `;
+            
+            // Add click listeners
+            item.querySelector(".btn-edit").addEventListener("click", () => editPlaylist(idx));
+            item.querySelector(".btn-delete").addEventListener("click", () => deletePlaylist(idx));
+            
+            playlistsContainer.appendChild(item);
+        });
+    }
+    
+    async function savePlaylistsToFirestore() {
+        const formattedMacDoc = activeClientMac.replace(/:/g, "-");
+        try {
+            await db.collection("playlists").doc(formattedMacDoc).update({
+                playlists: currentPlaylists
+            });
+        } catch (err) {
+            console.error("Firestore sync error:", err);
+            alert("Erro ao sincronizar com o servidor. Tente novamente.");
+        }
+    }
+    
+    // Action Form Submit (Add or Edit)
+    if (playlistActionForm) {
+        playlistActionForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const name = playlistNameInput.value.trim();
+            const url = playlistUrlInput.value.trim();
+            const editIdx = parseInt(editIndexInput.value);
+            
+            if (editIdx === -1) {
+                // Add new
+                currentPlaylists.push({ name, url });
+            } else {
+                // Edit existing
+                currentPlaylists[editIdx] = { name, url };
+                resetForm();
+            }
+            
+            renderPlaylists();
+            await savePlaylistsToFirestore();
+            playlistActionForm.reset();
+        });
+    }
+    
+    function editPlaylist(idx) {
+        const pl = currentPlaylists[idx];
+        if (playlistNameInput) playlistNameInput.value = pl.name;
+        if (playlistUrlInput) playlistUrlInput.value = pl.url;
+        if (editIndexInput) editIndexInput.value = idx;
+        
+        const titleEl = document.getElementById("playlist-form-title");
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square" style="color: var(--primary);"></i> Editar Lista`;
+        if (btnSavePlaylist) btnSavePlaylist.textContent = "Salvar AlteraÃ§Ãµes";
+        if (btnCancelEdit) btnCancelEdit.classList.remove("hidden");
+        if (playlistNameInput) playlistNameInput.focus();
+    }
+    
+    if (btnCancelEdit) {
+        btnCancelEdit.addEventListener("click", resetForm);
+    }
+    
+    function resetForm() {
+        if (playlistActionForm) playlistActionForm.reset();
+        if (editIndexInput) editIndexInput.value = "-1";
+        const titleEl = document.getElementById("playlist-form-title");
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-plus-circle" style="color: var(--primary);"></i> Adicionar Lista`;
+        if (btnSavePlaylist) btnSavePlaylist.textContent = "Salvar Lista";
+        if (btnCancelEdit) btnCancelEdit.classList.add("hidden");
+    }
+    
+    async function deletePlaylist(idx) {
+        if (confirm("Deseja realmente remover esta playlist?")) {
+            currentPlaylists.splice(idx, 1);
+            renderPlaylists();
+            await savePlaylistsToFirestore();
+            if (editIndexInput && editIndexInput.value === String(idx)) {
+                resetForm();
+            }
+        }
+    }
+    
+    function logoutClient() {
+        localStorage.removeItem("iptv_client_mac");
+        localStorage.removeItem("iptv_client_key");
+        activeClientMac = null;
+        activeClientKey = null;
+        currentPlaylists = [];
+        
+        if (dashboardState) dashboardState.classList.add("hidden");
+        if (loginState) loginState.classList.remove("hidden");
+        if (playlistLoginForm) playlistLoginForm.reset();
+    }
+    
+    if (btnPortalLogout) {
+        btnPortalLogout.addEventListener("click", logoutClient);
+    }
+    
+    // Initial check
+    checkActiveSession();
+
+});
